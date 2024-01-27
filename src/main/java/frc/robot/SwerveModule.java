@@ -30,6 +30,12 @@ public class SwerveModule {
     /* angle motor control requests */
     private final PositionVoltage anglePosition = new PositionVoltage(0);
 
+    /**
+     * Swerve Module component. manages the swerve module motors and encoder. as well as setting the module to the state needed
+     * 
+     * @param moduleNumber the number of the module, 
+     * @param moduleConstants the {@link SwerveModuleConstants} defined in Constants.java. contains the motor and CANCoder CANIDs and angle offset
+     */
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
         this.moduleNumber = moduleNumber;
         this.angleOffset = moduleConstants.angleOffset;
@@ -49,6 +55,12 @@ public class SwerveModule {
         mDriveMotor.getConfigurator().setPosition(0.0);
     }
 
+    /**
+     * sets the desired state of the modue. but first optomizes the rotation so it doesent turn more than 90 degrees.
+     * 
+     * @param desiredState the {@link SwerveModuleState} wich tells us the speed of the wheel and the rotation of the wheel
+     * @param isOpenLoopOpen Open loop is for teleop, allows for the module to "drift" (when you stop controling, it still finishes out its current velocity, and dosent just jerk to a stop) not setting open loop is for autos, where all the velocities are predefined, and we dont need to worry about looping over
+     */
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
         //Optomises the desired state, so that the wheel doenst have to turn more than 90 degrees
         desiredState = SwerveModuleState.optimize(desiredState, getState().angle); 
@@ -58,9 +70,12 @@ public class SwerveModule {
         setSpeed(desiredState, isOpenLoop);
     }
 
-    // sets the speed of the drive motor
-    // Open loop is for teleop, allows for the module to "drift" (when you stop controling, it still finishes out its current velocity, and dosent just jerk to a stop)
-    // not setting open loop is for autos, where all the velocities are predefined, and we dont need to worry about looping over
+    /**
+     * directly sets the speed and direction of the drive motor
+     * 
+     * @param desiredState the {@link SwerveModuleState} wich tells us the speed of the wheel and the rotation of the wheel
+     * @param isOpenLoopOpen Open loop is for teleop, allows for the module to "drift" (when you stop controling, it still finishes out its current velocity, and dosent just jerk to a stop) not setting open loop is for autos, where all the velocities are predefined, and we dont need to worry about looping over
+     */
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
         if(isOpenLoop){
             driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;

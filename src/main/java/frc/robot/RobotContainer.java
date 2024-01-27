@@ -24,6 +24,10 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
+
+    // This needs to be cleaned up to a sendable choser for the smart dashboard to use
+    // also once perephials are added, will need to add 2nd note manipulation controler
+
     // private final Joystick driver = new Joystick(1);
     private final Joystick driver = new Joystick(0);
 
@@ -55,21 +59,18 @@ public class RobotContainer {
 
     private final Swerve s_Swerve = new Swerve(theLEDs);
 
-    // dashboard selector for autos
+    // dashboard selector for autos and music
     private final SendableChooser<Command> autoChooser;
     private final SendableChooser<String> musiChooser;
 
-
-
-    // private final Orchestra orch = new Orchestra();
-
-    
-    // private final String[] songs = new String[] {
-    //     "music/Still Alive.chrp"
-    // };
-
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    /** The container for the robot. Contains subsystems, OI devices, and commands. 
+     *      this is the main class most things stem from. only thing above this is the robot.java that 
+     *      connects this to the driverstation
+    */
     public RobotContainer() {
+        /**sets the Teleop command, uses TeleopSwever class to connect the swerve drive and controls
+         * runs the Swerve.Drive() function periodicly 
+         */
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
@@ -102,7 +103,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        /* Driver Buttons */
+        /** Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
     }
 
@@ -118,7 +119,11 @@ public class RobotContainer {
     //     return new exampleAuto(s_Swerve);
     // }
 
-
+    /**
+     * Gets the selected Auto from the {@link SmartDashboard}'s {@link SendableChooser}
+     * 
+     * @return The comand to run in autonomous
+     */
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }

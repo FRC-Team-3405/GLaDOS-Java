@@ -33,8 +33,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
   }
@@ -74,6 +72,7 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during autonomous. */
+  // used for our ligts
   @Override
   public void autonomousPeriodic() {
     m_robotContainer.autonomousPeriodic();
@@ -94,6 +93,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {}
 
+
+  // Used to run music, and evantualy other things
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.

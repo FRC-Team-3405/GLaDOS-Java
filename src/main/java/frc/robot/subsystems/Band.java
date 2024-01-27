@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Band {
 
@@ -25,7 +26,10 @@ public class Band {
         new TalonFX(7),
         new TalonFX(8)
     };
-
+    
+    /**
+     * Create a Orchestra for the robot. makes 8 motors and adds them to the orchestra. also gets all the music files and saves them to a list to be used in a {@link SendableChooser}
+     */
     public Band() {
         songs = new ArrayList<String>();
 
@@ -44,6 +48,10 @@ public class Band {
         }
     }
 
+    /**
+     * Build the {@link SendableChooser} to be used in the {@link SmartDashboard}. 
+     * @return returns a new {@link SendableChooser} obeject that can be passed into the {@link SmartDashboard} through .putData()
+     */
     public SendableChooser<String> Buildchoser(){
         SendableChooser<String> chooser = new SendableChooser<String>();
         for (String file : songs) {
@@ -51,9 +59,12 @@ public class Band {
         }
         return chooser;
     }
-
-    public void play(String filePath){
-        _orchestra.loadMusic("music/"+filePath);
+    /**
+     * Plays the provided song. use with the {@link SendableChooser} to get correct song names.
+     * @param songName song file name with .chrp extention.
+     */
+    public void play(String songName){
+        _orchestra.loadMusic("music/"+songName);
         _orchestra.play();
     }
 }
