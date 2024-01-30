@@ -12,8 +12,8 @@ Our robot is designed to be a fast cycle, floor pickup, and speaker shooting bot
 | --- | --- | --- | --- |
 | 🟪 Purple | D | Default | Default Mode. Intake in, no note, normal operation. |
 | Intake Modes |
-| 🟥 Red Blink | IO | Input Out | Intake out and running, waiting for note pickup, reduced movemnt and rotation speed.|
-| 🟥 Red | IL | Input Loaded | Intake out with note in, ready to retract, slightly reduced movement speed.|
+| 🟥 Red Blink | IO | Intake Out | Intake out and running, waiting for note pickup, reduced movemnt and rotation speed.|
+| 🟥 Red | IL | Intake Loaded | Intake out with note in, ready to retract, slightly reduced movement speed.|
 | 🟧 Orange | R | Ready | Intake in with note, searching for speaker april tags |
 | Scoring Modes |
 | 🟧 Orange Blink | R | Ready | Intake in with note, speaker april tags found, ready to lock |
