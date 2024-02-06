@@ -3,6 +3,9 @@ package frc.robot;
 import com.ctre.phoenix6.Orchestra;
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.networktables.DoubleTopic;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -28,15 +31,16 @@ public class RobotContainer {
     // This needs to be cleaned up to a sendable choser for the smart dashboard to use
     // also once perephials are added, will need to add 2nd note manipulation controler
 
-    // private final Joystick driver = new Joystick(1);
     private final Joystick driver = new Joystick(0);
+    private final XboxController secondary = new XboxController(1);
 
 
     // /* XBOX CONTROLOR */
-    // /* Drive Controls */
-    // private final int translationAxis = XboxController.Axis.kLeftY.value;
-    // private final int strafeAxis = XboxController.Axis.kLeftX.value;
-    // private final int rotationAxis = XboxController.Axis.kRightX.value;
+    /* Drive Controls */
+    private final int sLy = XboxController.Axis.kLeftY.value;
+    private final int sLX = XboxController.Axis.kLeftX.value;
+    private final int sRX = XboxController.Axis.kRightX.value;
+    private final int sRY = XboxController.Axis.kRightY.value;
 
     // /* Driver Buttons */
     // private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
@@ -51,6 +55,7 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, Joystick.ButtonType.kTrigger.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, Joystick.ButtonType.kTop.value);
+    private final JoystickButton Test = new JoystickButton(driver, 3);
 
     /* Subsystems */
     private final LEDS theLEDs = new LEDS(9,60);
@@ -77,7 +82,8 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
+                () -> robotCentric.getAsBoolean(),
+                theLEDs
             )
         );
 
@@ -93,7 +99,6 @@ public class RobotContainer {
         SmartDashboard.putData("Music Choser",musiChooser);
 
         theLEDs.SetFull(255, 60, 0);
-
     }
 
     /**
@@ -105,6 +110,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /** Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        
     }
 
 

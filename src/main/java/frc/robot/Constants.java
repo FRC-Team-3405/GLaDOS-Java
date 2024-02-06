@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -129,6 +130,58 @@ public final class Constants {
         }
     }
 
+    public static final class Intake {
+        public static final double noteDetectionDistance = 30;
+        public static final double barP = 5e-5;
+        public static final double barI = 1e-6;
+        public static final double barD = 0;
+
+        public static final double barMaxOut = 1;
+        public static final double barMinOut = -1;
+
+        public static final double barMaxRPM = 5700;
+        public static final double barMaxVel = 2000;
+        public static final double barMaxAcc = 1500;
+
+        public static final double barOutPoint = 1000;
+        public static final double barInPoint = -1000;
+    }
+
+    // holds constants for mode system
+    public static final class Mode {
+        public static final double blinkTime = 5.0;
+        // Mode modifiers, in percentages, controlor input is multiplied by these
+        // max forward speed (1) * 40% speed (.40) = .40 output
+        public static final class Modifiers {
+            public static final class Intake {
+                public static final double driveSpeed = 0.4;
+                public static final double rotSpeed = 0.4;
+            }
+            public static final class Lock {
+                public static final double driveSpeed = 0.3;
+                public static final double rotSpeed = 0.0;
+            }
+        }
+
+        public static final class Colors {
+            public static final Color D = Color.kPurple; // Default Color
+            public static final Color I = Color.kRed;    // Intake Color
+            public static final Color IO = Color.kDarkRed;    // Intake Out Blink Color
+            public static final Color R = Color.kOrange; // Ready/Note Color
+            public static final Color RB = Color.kDarkOrange; // Ready Blink Color
+            public static final Color KP = Color.kYellow;// Lock Pending color
+            public static final Color K = Color.kGreen;  // Lock color
+            public static final Color L = Color.kSkyBlue;// Launching color
+
+            public static final Color C = Color.kYellow; // Climber Blink Color
+            public static final Color CE = Color.kRed;   // Climber Extenidng other Blink Color
+            public static final Color CR = Color.kOrange;   // Climber Ready other Blink Color
+            public static final Color CC = Color.kSkyBlue;   // Climber Climbing other Blink Color
+            public static final Color CL = Color.kGreen;   // Climber Locked other Blink Color
+
+        }
+    }
+
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
         public static final double kMaxSpeedMetersPerSecond = 2;
         public static final double kMaxAccelerationMetersPerSecondSquared = 2;
@@ -144,4 +197,5 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
 }

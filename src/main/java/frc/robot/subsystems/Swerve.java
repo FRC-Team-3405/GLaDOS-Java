@@ -194,8 +194,8 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic(){
+        //set Module dashboard values
         swerveOdometry.update(getGyroYaw(), getModulePositions());
-
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
