@@ -6,6 +6,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -64,6 +65,10 @@ public class RobotContainer {
 
     private final Swerve s_Swerve = new Swerve(theLEDs);
 
+    // private final Intake s_Intake = new Intake(#, #, #, #);
+
+    // private final Launcher s_Launcher = new Launcher(#, #, #);
+
     // dashboard selector for autos and music
     private final SendableChooser<Command> autoChooser;
     private final SendableChooser<String> musiChooser;
@@ -113,7 +118,26 @@ public class RobotContainer {
         
     }
 
+    public void updateInfo() {
+        SmartDashboard.putBoolean("HasNote", false /*s_Intake.checkForNote()*/);
+        SmartDashboard.putBoolean("IntakeDeployed", false/*s_Intake.deployed*/);
+        SmartDashboard.putNumber("LauncherAngle", 45/*s_Launcher.getAngle()*/);
 
+        // {"D","IO","IL","N","R","K","KP","L","CE","CR","C","CL"};
+        SmartDashboard.putBoolean("D", theLEDs.getMode() == "D");
+        SmartDashboard.putBoolean("IO", theLEDs.getMode() == "IO");
+        SmartDashboard.putBoolean("IL", theLEDs.getMode() == "IL");
+        SmartDashboard.putBoolean("N", theLEDs.getMode() == "N");
+        SmartDashboard.putBoolean("R", theLEDs.getMode() == "R");
+        SmartDashboard.putBoolean("K", theLEDs.getMode() == "K");
+        SmartDashboard.putBoolean("KP", theLEDs.getMode() == "KP");
+        SmartDashboard.putBoolean("L", theLEDs.getMode() == "L");
+        SmartDashboard.putBoolean("CE", theLEDs.getMode() == "CE");
+        SmartDashboard.putBoolean("CR", theLEDs.getMode() == "CR");
+        SmartDashboard.putBoolean("C", theLEDs.getMode() == "C");
+        SmartDashboard.putBoolean("CL", theLEDs.getMode() == "CL");
+        
+    }   
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -141,7 +165,7 @@ public class RobotContainer {
     public void autonomousPeriodic() {
         theLEDs.rainbow();
     }
-
+    
     public void testInit() {
         theBand.play(musiChooser.getSelected());
     }
@@ -152,6 +176,7 @@ public class RobotContainer {
 
     public void disabledInit () {
         theLEDs.SetFull(255, 60, 0);
+        theBand.orchestra.stop();
     }
 
     // public void PlayMusic(int sel) {

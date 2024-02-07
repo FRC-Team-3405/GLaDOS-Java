@@ -145,6 +145,27 @@ public final class Constants {
 
         public static final double barOutPoint = 1000;
         public static final double barInPoint = -1000;
+
+        public static final double intakeVel = 2;
+    }
+
+
+    public static final class Launcher {
+        public static final double noteDetectionDistance = 30;
+        public static final double screwP = 5e-5;
+        public static final double screwI = 1e-6;
+        public static final double screwD = 0;
+
+        public static final double screwMaxOut = 1;
+        public static final double screwMinOut = -1;
+
+        public static final double screwMaxRPM = 3000;
+        public static final double screwMaxVel = 750;
+        public static final double screwMaxAcc = 500;
+
+        public static final double screwRotPerDeg = 5;
+
+        public static final double launcerVel = 2;
     }
 
     // holds constants for mode system

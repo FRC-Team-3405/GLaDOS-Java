@@ -27,7 +27,7 @@ public class Intake extends SubsystemBase{
 
 
     public Intake(int m_barMotorId, int m_intakeMotor1ID, int m_intakeMotor2ID, int ultrasonicSensorID) {
-        SmartDashboard.putNumber("test",3);
+        // SmartDashboard.putNumber("test",3);
         m_barMotor = new CANSparkMax(m_barMotorId, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
         m_intakeMotor1 = new VictorSPX(m_intakeMotor1ID);
         m_intakeMotor2 = new VictorSPX(m_intakeMotor2ID);
