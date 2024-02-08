@@ -58,6 +58,8 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(driver, Joystick.ButtonType.kTop.value);
     private final JoystickButton Test = new JoystickButton(driver, 3);
 
+    private final NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
+
     /* Subsystems */
     private final LEDS theLEDs = new LEDS(9,60);
 
