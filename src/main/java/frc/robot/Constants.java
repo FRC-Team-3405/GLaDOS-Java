@@ -131,41 +131,56 @@ public final class Constants {
     }
 
     public static final class Intake {
+        public static final int RollerCAN1 = 9;
+        public static final int RollerCAN2 = 10;
+        public static final int ActuatorCAN = 11;
+        
+        public static final int forwardLim = 60;
+        public static final int reversLim = 0;
+    
         public static final double noteDetectionDistance = 30;
         public static final double barP = 5e-5;
         public static final double barI = 1e-6;
         public static final double barD = 0;
-
+    
         public static final double barMaxOut = 1;
         public static final double barMinOut = -1;
-
-        public static final double barMaxRPM = 5700;
-        public static final double barMaxVel = 2000;
-        public static final double barMaxAcc = 1500;
-
+    
+        public static final double barMaxRPM = 570;
+        public static final double barMaxVel = 200;
+        public static final double barMaxAcc = 150;
+    
         public static final double barOutPoint = 1000;
         public static final double barInPoint = -1000;
-
-        public static final double intakeVel = 2;
+    
+        public static final double intakeVel = 0.75;
+        public static final double acuateVel = 1;
     }
-
-
-    public static final class Launcher {
-        public static final double noteDetectionDistance = 30;
-        public static final double screwP = 5e-5;
-        public static final double screwI = 1e-6;
-        public static final double screwD = 0;
-
-        public static final double screwMaxOut = 1;
-        public static final double screwMinOut = -1;
-
-        public static final double screwMaxRPM = 3000;
-        public static final double screwMaxVel = 750;
-        public static final double screwMaxAcc = 500;
-
-        public static final double screwRotPerDeg = 5;
-
-        public static final double launcerVel = 2;
+      public static final class Launcher {
+        public static final int RightCAN = 13;
+        public static final int LeftCAN = 12;
+    
+        public static final double LaunchV = 100;
+        public static final double LaunchP = 1;
+    
+        public static final double LaunchASAPTime = 2;
+        public static final double LaunchStopTime = 1;
+    
+        public static final double P = 0.08;
+        public static final double I = 0.05;
+        public static final double D = 0.00;
+    
+        public static final double FF = 0.000156;
+    
+        public static final double MaxOut = 1;
+        public static final double MinOut = -1;
+    
+        public static final double MaxRPM = 2000;
+        public static final double MaxVel = 1500;
+        public static final double MaxAcc = 500;
+    
+        public static final double OutPoint = 1000;
+        public static final double InPoint = -1000;
     }
 
     // holds constants for mode system

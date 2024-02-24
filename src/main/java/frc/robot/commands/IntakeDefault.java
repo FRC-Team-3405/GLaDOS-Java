@@ -6,54 +6,50 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.function.BooleanSupplier;
 import frc.robot.subsystems.Intake;
 
-public class IntakeRun extends Command {
+public class IntakeDefault extends Command {
 
     private Intake s_Intake;
     private DigitalInput LIM;
-    private JoystickButton overrideButton;
     // private Boolean end;
-    private Boolean bHold;
+    private Boolean first;
 
     /**
      * Run intake untill note is obtained or manualy disabled
      * 
      * @param s_Intake Intake object
      */
-    public IntakeRun(Intake s_Intake, DigitalInput LIM, JoystickButton overrideButton) {
+    public IntakeDefault(Intake s_Intake, DigitalInput LIM) {
         this.s_Intake = s_Intake;
         this.LIM = LIM;
-        this.overrideButton = overrideButton;
+        
         // this.end = false;
-        this.bHold = true;
+        this.first = false;
         addRequirements(s_Intake);
     }
 
     @Override
     public void initialize() {
         // tell the intake to extend
-        System.out.println("Start IntakeRun");
-        s_Intake.setDeploy(true);
-        s_Intake.startIntake();
-        this.bHold = true;
+        System.out.println("Start IntakeDefault");
+        s_Intake.setDeploy(false);
+        s_Intake.endIntake();
     }
 
     @Override
     public void execute() {
-        if (bHold) bHold = overrideButton.getAsBoolean();
+        
     }
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("End IntakeRun");
+        System.out.println("Start IntakeDefault");
     }
 
     @Override
     public boolean isFinished() {
         // this should trigger when a note is detected, or manualy triggerd
         // return(s_Intake.checkForNote() || switchButton.getAsBoolean());
-        if (!LIM.get()) System.out.println("LIM");
-        if (overrideButton.getAsBoolean()) System.out.println("OVER");
-        return !LIM.get() || (overrideButton.getAsBoolean() && !bHold);
+        return false;
     }
     
 }

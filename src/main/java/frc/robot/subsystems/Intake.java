@@ -6,12 +6,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
+// import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 public class Intake extends SubsystemBase{
 
@@ -19,53 +22,88 @@ public class Intake extends SubsystemBase{
     public VictorSPX m_intakeMotor2;
     public CANSparkMax m_barMotor;
     public RelativeEncoder barEncoder;
-    public SparkPIDController barPID;
-    public boolean deployed;
-    public AnalogInput ultrasonicSensor;
+    // public SparkPIDController barPID;
+    private boolean deployed;
 
     public double kP, kI, kD, kMaxOut, kMinOut, maxRPM, maxVel, maxAcc;
 
 
-    public Intake(int m_barMotorId, int m_intakeMotor1ID, int m_intakeMotor2ID, int ultrasonicSensorID) {
+    public Intake(int m_barMotorId, int m_intakeMotor1ID, int m_intakeMotor2ID) {
         // SmartDashboard.putNumber("test",3);
         m_barMotor = new CANSparkMax(m_barMotorId, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
         m_intakeMotor1 = new VictorSPX(m_intakeMotor1ID);
         m_intakeMotor2 = new VictorSPX(m_intakeMotor2ID);
-        ultrasonicSensor = new AnalogInput(ultrasonicSensorID);
+
+        m_barMotor.restoreFactoryDefaults();
+        m_barMotor.setIdleMode(IdleMode.kBrake);
 
         barEncoder = m_barMotor.getEncoder();
-        barPID = m_barMotor.getPIDController();
+        // barPID = m_barMotor.getPIDController();
 
-        kP = Constants.Intake.barP;
-        kI = Constants.Intake.barI;
-        kD = Constants.Intake.barD;
+        // kP = Constants.Intake.barP;
+        // kI = Constants.Intake.barI;
+        // kD = Constants.Intake.barD;
     
-        kMaxOut = Constants.Intake.barMaxOut;
-        kMinOut = Constants.Intake.barMinOut;
+        // kMaxOut = Constants.Intake.barMaxOut;
+        // kMinOut = Constants.Intake.barMinOut;
 
-        maxRPM = Constants.Intake.barMaxRPM;
-        maxVel = Constants.Intake.barMaxVel;
-        maxAcc = Constants.Intake.barMaxAcc;
+        // maxRPM = Constants.Intake.barMaxRPM;
+        // maxVel = Constants.Intake.barMaxVel;
+        // maxAcc = Constants.Intake.barMaxAcc;
 
         // set PID coefficients
-        barPID.setP(kP);
-        barPID.setI(kI);
-        barPID.setD(kD);
-        barPID.setOutputRange(kMinOut, kMaxOut);
+        // barPID.setP(kP);
+        // barPID.setI(kI);
+        // barPID.setD(kD);
+        // barPID.setIZone(0);
+        // barPID.setFF(0);
+        // barPID.setOutputRange(kMinOut, kMaxOut);
 
 
+        m_barMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+        m_barMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    
+        m_barMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, Constants.Intake.forwardLim);
+        m_barMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, Constants.Intake.reversLim);
+    
+        SmartDashboard.putBoolean("Forward Soft Limit Enabled",
+                                  m_barMotor.isSoftLimitEnabled(CANSparkMax.SoftLimitDirection.kForward));
+        SmartDashboard.putBoolean("Reverse Soft Limit Enabled",
+                                  m_barMotor.isSoftLimitEnabled(CANSparkMax.SoftLimitDirection.kReverse));                          
+        SmartDashboard.putNumber("Forward Soft Limit",
+                                  m_barMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kForward));
+        SmartDashboard.putNumber("Reverse Soft Limit",
+                                  m_barMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kReverse));
         
-        int smartMotionSlot = 0;
-        barPID.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
-        barPID.setSmartMotionMinOutputVelocity(0, smartMotionSlot);
-        barPID.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
-        barPID.setSmartMotionAllowedClosedLoopError(0, smartMotionSlot);
+        // barPID.setReference(-0.3, CANSparkMax.ControlType.kDutyCycle);
+    }
+
+    public void startIntake() {
+        m_intakeMotor1.set(VictorSPXControlMode.PercentOutput, Constants.Intake.intakeVel);
+        m_intakeMotor2.set(VictorSPXControlMode.PercentOutput, Constants.Intake.intakeVel);
+        // barPID.setReference(0.3, CANSparkMax.ControlType.kDutyCycle);
+        m_barMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+        m_barMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
+        m_barMotor.set(Constants.Intake.acuateVel);
         
+        System.out.println("Start");
+    }
+    
+    public void endIntake() {
+        m_intakeMotor1.set(VictorSPXControlMode.PercentOutput, 0);
+        m_intakeMotor2.set(VictorSPXControlMode.PercentOutput, 0);
+        // barPID.setReference(-0.3, CANSparkMax.ControlType.kDutyCycle);
+        m_barMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
+        m_barMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+        m_barMotor.set(-Constants.Intake.acuateVel);
+        System.out.println("End");
     }
 
     public void runIntake() {
-        m_intakeMotor1.set(VictorSPXControlMode.Velocity, Constants.Intake.intakeVel);
-        m_intakeMotor2.set(VictorSPXControlMode.Velocity, Constants.Intake.intakeVel);
+        // m_barMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, SmartDashboard.getBoolean("Forward Soft Limit Enabled", true));
+        // m_barMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, SmartDashboard.getBoolean("Reverse Soft Limit Enabled", true));
+        m_barMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)SmartDashboard.getNumber("Forward Soft Limit", 15));
+        m_barMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float)SmartDashboard.getNumber("Reverse Soft Limit", 0));
     }
 
     public void breakIntake(){
@@ -74,30 +112,39 @@ public class Intake extends SubsystemBase{
     }
 
     public boolean checkForNote() {
-        return (ultrasonicSensor.getValue() <= Constants.Intake.noteDetectionDistance);
+        return false;
+    }
+
+    public void pushIntake(boolean stop) {
+        if(!stop) {
+        m_intakeMotor1.set(VictorSPXControlMode.PercentOutput, -Constants.Intake.intakeVel);
+        m_intakeMotor2.set(VictorSPXControlMode.PercentOutput, -Constants.Intake.intakeVel);
+        } else {
+        m_intakeMotor1.set(VictorSPXControlMode.PercentOutput, 0);
+        m_intakeMotor2.set(VictorSPXControlMode.PercentOutput, 0);
+        }
     }
 
     public void toggleDeploy() {
         if(!deployed) {
-            // refrence this code for precice neo control through the spark max
-            // https://github.com/REVrobotics/SPARK-MAX-Examples/blob/master/Java/Smart%20Motion%20Example/src/main/java/frc/robot/Robot.java
-
-            barPID.setReference(Constants.Intake.barOutPoint, CANSparkMax.ControlType.kSmartMotion);
             deployed = true;
+            startIntake();
         } else {
-            barPID.setReference(Constants.Intake.barInPoint, CANSparkMax.ControlType.kSmartMotion);
             deployed = false;
+            endIntake();
         }
     }
 
     public void setDeploy(boolean mode) {
         if(mode && !deployed) {
-            barPID.setReference(Constants.Intake.barOutPoint, CANSparkMax.ControlType.kSmartMotion);
             deployed = true;
         } else if(!mode && deployed) {
-            barPID.setReference(Constants.Intake.barInPoint, CANSparkMax.ControlType.kSmartMotion);
             deployed = false;
         }
+    }
+
+    public boolean getMode() {
+        return deployed;
     }
     
 

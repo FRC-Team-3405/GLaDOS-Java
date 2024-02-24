@@ -67,6 +67,9 @@ public class RobotContainer {
 
     private final Swerve s_Swerve = new Swerve(theLEDs);
 
+    public Intake intake = new Intake(Constants.Intake.ActuatorCAN, Constants.Intake.RollerCAN1, Constants.Intake.RollerCAN2);
+    public Launcher launcher = new Launcher(Constants.Launcher.LeftCAN,Constants.Launcher.RightCAN);
+
     // private final Intake s_Intake = new Intake(#, #, #, #);
 
     // private final Launcher s_Launcher = new Launcher(#, #, #);
