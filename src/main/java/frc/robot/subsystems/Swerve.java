@@ -4,6 +4,7 @@ import frc.robot.SwerveModule;
 import frc.robot.Constants;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -56,10 +57,10 @@ public class Swerve extends SubsystemBase {
                 this::getChasisHeading, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+                        new PIDConstants(5.0, 1.0, 0.0), // Translation PID constants
+                        new PIDConstants(5.0, 1.0, 0.0), // Rotation PID constants
                         3.5, // Max module speed, in m/s
-                        0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                        0.3, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
                 () -> {
@@ -165,7 +166,11 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setHeading(Rotation2d heading){
-        swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), heading));
+        swerveOdometry.resetPosition(
+            getGyroYaw(), 
+            getModulePositions(), 
+            new Pose2d(getPose().getTranslation(), heading)
+        );
     }
 
     public void zeroHeading(){
@@ -184,7 +189,8 @@ public class Swerve extends SubsystemBase {
 
     public ChassisSpeeds getChasisHeading(){
         Pose2d now = getPose();
-        return ChassisSpeeds.fromFieldRelativeSpeeds(
+        // return swerveOdometry.
+        return ChassisSpeeds.fromRobotRelativeSpeeds(
                                     now.getX(), 
                                     now.getY(), 
                                     now.getRotation().getRadians(), 

@@ -1,20 +1,37 @@
 package frc.robot;
 
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
 import com.ctre.phoenix6.Orchestra;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -35,6 +52,7 @@ public class RobotContainer {
     private final Joystick driver = new Joystick(0);
     private final XboxController secondary = new XboxController(1);
 
+    private final PowerDistribution PDP = new PowerDistribution();
 
     // /* XBOX CONTROLOR */
     /* Drive Controls */
@@ -52,23 +70,29 @@ public class RobotContainer {
     private final int translationAxis = Joystick.AxisType.kY.value;
     private final int strafeAxis = Joystick.AxisType.kX.value;
     private final int rotationAxis = Joystick.AxisType.kTwist.value;
+    private final int throttleAxis = 2;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, Joystick.ButtonType.kTrigger.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, Joystick.ButtonType.kTop.value);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, 2);
+    private final JoystickButton robotCentric = new JoystickButton(driver, 7);
     private final JoystickButton Test = new JoystickButton(driver, 3);
+
+    // private final NamedCommands NamedCommands = new NamedCommands();
 
     private final NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
 
     /* Subsystems */
-    private final LEDS theLEDs = new LEDS(9,60);
+    private final LEDS theLEDs = new LEDS(0,60);
 
     private final Band theBand = new Band();
 
     private final Swerve s_Swerve = new Swerve(theLEDs);
 
-    public Intake intake = new Intake(Constants.Intake.ActuatorCAN, Constants.Intake.RollerCAN1, Constants.Intake.RollerCAN2);
+    public Intake intake = new Intake(Constants.Intake.ActuatorCAN, Constants.Intake.RollerCAN1, Constants.Intake.RollerCAN2,secondary);
+
     public Launcher launcher = new Launcher(Constants.Launcher.LeftCAN,Constants.Launcher.RightCAN);
+    
+    public DigitalInput LIM = new DigitalInput(0);
 
     // private final Intake s_Intake = new Intake(#, #, #, #);
 
@@ -77,6 +101,9 @@ public class RobotContainer {
     // dashboard selector for autos and music
     private final SendableChooser<Command> autoChooser;
     private final SendableChooser<String> musiChooser;
+
+
+    private Thread m_visionThread;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. 
      *      this is the main class most things stem from. only thing above this is the robot.java that 
@@ -92,23 +119,77 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
+                () -> -driver.getRawAxis(throttleAxis), 
                 () -> robotCentric.getAsBoolean(),
                 theLEDs
             )
         );
+        
+        intake.setDefaultCommand(new IntakeDefault(intake,LIM));
+
+        NamedCommands.registerCommand("RunIntake", new IntakeRun(intake, LIM, new JoystickButton(secondary, 3), theLEDs));
+        NamedCommands.registerCommand("LaunchASAP", new LaunchASAP(intake,launcher,theLEDs));
+
 
         // Configure the button bindings
         configureButtonBindings();
 
         //Build the auto chooser
-        autoChooser = AutoBuilder.buildAutoChooser();
-        // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+        // autoChooser = AutoBuilder.buildAutoChooser();
+        autoChooser = AutoBuilder.buildAutoChooser("MidMain");
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         musiChooser = theBand.Buildchoser();
         SmartDashboard.putData("Music Choser",musiChooser);
 
-        theLEDs.SetFull(255, 60, 0);
+        secondary.getPOV();
+
+        // theLEDs.SetFull(255, 60, 0);
+        theLEDs.setMode("D");
+
+
+        m_visionThread =
+        new Thread(
+            () -> {
+              // Get the UsbCamera from CameraServer
+              UsbCamera camera = CameraServer.startAutomaticCapture();
+              // Set the resolution
+              camera.setResolution(640/2, 480/2);
+
+              // Get a CvSink. This will capture Mats from the camera
+              CvSink cvSink = CameraServer.getVideo();
+              // Setup a CvSource. This will send images back to the Dashboard
+              CvSource outputStream = CameraServer.putVideo("Note", 640/2, 480/2);
+
+              // Mats are very memory expensive. Lets reuse this Mat.
+              Mat mat = new Mat();
+
+              // This cannot be 'true'. The program will never exit if it is. This
+              // lets the robot stop this thread when restarting robot code or
+              // deploying.
+              while (!Thread.interrupted()) {
+                // Tell the CvSink to grab a frame from the camera and put it
+                // in the source mat.  If there is an error notify the output.
+                if (cvSink.grabFrame(mat) == 0) {
+                  // Send the output the error.
+                  outputStream.notifyError(cvSink.getError());
+                  // skip the rest of the current iteration
+                  continue;
+                }
+                // Imgproc.rectangle(
+                //     mat, new Point(100, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
+                // List<MatOfPoint> list = new ArrayList<MatOfPoint>();
+                // list.add( new MatOfPoint (
+                //     new Point(208, 71), new Point(421, 161),
+                //     new Point(226, 232), new Point(332, 52),
+                //     new Point(363, 250)));
+                // Imgproc.polylines(mat, list, false, new Scalar(255,255,255), 2);
+                // // Give the output stream a new image to display
+                outputStream.putFrame(mat);
+              }
+            });
+        m_visionThread.setDaemon(true);
+        m_visionThread.start();
     }
 
     /**
@@ -120,27 +201,46 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /** Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        new JoystickButton(secondary, 4).onTrue(new LaunchASAP(intake,launcher,theLEDs));
+        new JoystickButton(secondary, 2).onTrue(new IntakeRun(intake, LIM, new JoystickButton(secondary, 2),theLEDs));
+        new JoystickButton(secondary, 3).onTrue(new IntakeFix(intake, LIM, new JoystickButton(secondary, 3),theLEDs));
+        new JoystickButton(secondary, 1).onTrue(new IntakeAmp(intake, LIM, new JoystickButton(secondary, 1), new JoystickButton(secondary, 6),theLEDs));
         
     }
 
     public void updateInfo() {
-        SmartDashboard.putBoolean("HasNote", false /*s_Intake.checkForNote()*/);
-        SmartDashboard.putBoolean("IntakeDeployed", false/*s_Intake.deployed*/);
-        SmartDashboard.putNumber("LauncherAngle", 45/*s_Launcher.getAngle()*/);
+        SmartDashboard.putBoolean("IntakeDeployed", intake.getMode());
+        SmartDashboard.putBoolean("Note", LIM.get());
 
-        // {"D","IO","IL","N","R","K","KP","L","CE","CR","C","CL"};
+        // {"D","IO","IR","L","LS"};
         SmartDashboard.putBoolean("D", theLEDs.getMode() == "D");
         SmartDashboard.putBoolean("IO", theLEDs.getMode() == "IO");
-        SmartDashboard.putBoolean("IL", theLEDs.getMode() == "IL");
+        SmartDashboard.putBoolean("IR", theLEDs.getMode() == "IR");
+        SmartDashboard.putBoolean("IF", theLEDs.getMode() == "IF");
+        SmartDashboard.putBoolean("IA", theLEDs.getMode() == "IA");
         SmartDashboard.putBoolean("N", theLEDs.getMode() == "N");
-        SmartDashboard.putBoolean("R", theLEDs.getMode() == "R");
-        SmartDashboard.putBoolean("K", theLEDs.getMode() == "K");
-        SmartDashboard.putBoolean("KP", theLEDs.getMode() == "KP");
+        SmartDashboard.putBoolean("LS", theLEDs.getMode() == "LS");
         SmartDashboard.putBoolean("L", theLEDs.getMode() == "L");
-        SmartDashboard.putBoolean("CE", theLEDs.getMode() == "CE");
-        SmartDashboard.putBoolean("CR", theLEDs.getMode() == "CR");
-        SmartDashboard.putBoolean("C", theLEDs.getMode() == "C");
-        SmartDashboard.putBoolean("CL", theLEDs.getMode() == "CL");
+        
+        SmartDashboard.putData("intake", intake);
+        SmartDashboard.putData("Launcher", launcher);
+        SmartDashboard.putData("Gyro",s_Swerve.gyro);
+        SmartDashboard.putBoolean("ControlorA", new JoystickButton(secondary, 1).getAsBoolean());
+        SmartDashboard.putBoolean("ControlorB", new JoystickButton(secondary, 2).getAsBoolean());
+        SmartDashboard.putBoolean("ControlorX", new JoystickButton(secondary, 3).getAsBoolean());
+
+        SmartDashboard.putData(PDP);
+        System.out.println("Radio");
+        System.out.println(PDP.getCurrent(15));
+        System.out.println("RIO");
+        System.out.println(PDP.getCurrent(20));
+        System.out.println("Total");
+        System.out.println(PDP.getTotalCurrent());
+
+        intake.updateData();
+
+        double throtleVal = (driver.getRawAxis(throttleAxis)+1)/2;
+        SmartDashboard.putNumber("Throttle", throtleVal);
         
     }   
 
@@ -163,12 +263,19 @@ public class RobotContainer {
         return autoChooser.getSelected();
     }
 
+    public void teleopInit() {
+        theLEDs.SetFull(0, 0, 255);
+        theLEDs.setMode("D");
+        theLEDs.updateMode();
+    }
+
     public void teleopPeriodic() {
         // theLEDs.rainbow();
+        theLEDs.updateMode();
     }
 
     public void autonomousPeriodic() {
-        theLEDs.rainbow();
+        // theLEDs.rainbow();
     }
     
     public void testInit() {

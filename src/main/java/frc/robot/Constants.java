@@ -23,8 +23,8 @@ public final class Constants {
         COTSTalonFXSwerveConstants.SDS.MK4i.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(24.5); //TODOx: This must be tuned to specific robot
-        public static final double wheelBase = Units.inchesToMeters(24.5); //TODOx: This must be tuned to specific robot
+        public static final double trackWidth = Units.inchesToMeters(16.75); //TODO: This must be tuned to specific robot
+        public static final double wheelBase = Units.inchesToMeters(16.75); //TODO: This must be tuned to specific robot
         public static final double wheelCircumference = chosenModule.wheelCircumference;
 
         /* Swerve Kinematics 
@@ -136,6 +136,7 @@ public final class Constants {
         public static final int ActuatorCAN = 11;
         
         public static final int forwardLim = 60;
+        public static final int forwardAmpLim = 30;
         public static final int reversLim = 0;
     
         public static final double noteDetectionDistance = 30;
@@ -153,8 +154,13 @@ public final class Constants {
         public static final double barOutPoint = 1000;
         public static final double barInPoint = -1000;
     
-        public static final double intakeVel = 0.75;
-        public static final double acuateVel = 1;
+        public static final double intakeVel = 0.8;
+        public static final double intakeNudge = 0.2;
+
+        public static final double acuateVel = 0.8;
+        public static final double acuateManual = 0.2;
+
+        public static final double OverRun = 0.75;
     }
       public static final class Launcher {
         public static final int RightCAN = 13;
@@ -200,27 +206,21 @@ public final class Constants {
         }
 
         public static final class Colors {
-            public static final Color D = Color.kPurple; // Default Color
-            public static final Color I = Color.kRed;    // Intake Color
-            public static final Color IO = Color.kDarkRed;    // Intake Out Blink Color
-            public static final Color R = Color.kOrange; // Ready/Note Color
-            public static final Color RB = Color.kDarkOrange; // Ready Blink Color
-            public static final Color KP = Color.kYellow;// Lock Pending color
-            public static final Color K = Color.kGreen;  // Lock color
-            public static final Color L = Color.kSkyBlue;// Launching color
-
-            public static final Color C = Color.kYellow; // Climber Blink Color
-            public static final Color CE = Color.kRed;   // Climber Extenidng other Blink Color
-            public static final Color CR = Color.kOrange;   // Climber Ready other Blink Color
-            public static final Color CC = Color.kSkyBlue;   // Climber Climbing other Blink Color
-            public static final Color CL = Color.kGreen;   // Climber Locked other Blink Color
-
+            public static final Color D = Color.kBlue;    // Default Color
+            public static final Color IO = Color.kRed;    // Intake Out Color
+            public static final Color IF = Color.kPurple; // Intake Fix Color
+            public static final Color IR = Color.kOrange; // Intake Retracting Color
+            public static final Color IA = Color.kPink;   // Intake Amp Color
+            public static final Color N = Color.kYellow;  // Note Color
+            public static final Color LS = Color.kGreen;  // Launcher Spinup Color
+            public static final Color L = Color.kAqua;     // Color Color
+            public static final Color DIS = Color.kPurple; //Disable Color
         }
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 2;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 2;
+        public static final double kMaxSpeedMetersPerSecond = 1;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     

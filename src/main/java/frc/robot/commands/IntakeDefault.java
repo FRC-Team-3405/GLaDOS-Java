@@ -37,7 +37,7 @@ public class IntakeDefault extends Command {
 
     @Override
     public void execute() {
-        
+        s_Intake.nudge();
     }
 
     @Override

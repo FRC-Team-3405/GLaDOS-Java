@@ -6,15 +6,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.function.BooleanSupplier;
 
+import com.revrobotics.CANSparkMax;
+
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDS;
 
-public class IntakeRun extends Command {
+public class IntakeAmp extends Command {
 
     private Intake s_Intake;
     private DigitalInput LIM;
     private JoystickButton overrideButton;
+    private JoystickButton PushButton;
     // private Boolean end;
     private Boolean bHold;
     private Boolean end;
@@ -26,10 +29,11 @@ public class IntakeRun extends Command {
      * 
      * @param s_Intake Intake object
      */
-    public IntakeRun(Intake s_Intake, DigitalInput LIM, JoystickButton overrideButton, LEDS theLEDs) {
+    public IntakeAmp(Intake s_Intake, DigitalInput LIM, JoystickButton overrideButton, JoystickButton PushButton, LEDS theLEDs) {
         this.s_Intake = s_Intake;
         this.LIM = LIM;
         this.overrideButton = overrideButton;
+        this.PushButton = PushButton;
         this.theLEDs = theLEDs;
         // this.end = false;
         this.bHold = true;
@@ -40,26 +44,26 @@ public class IntakeRun extends Command {
     @Override
     public void initialize() {
         // tell the intake to extend
-        System.out.println("Start IntakeRun");
+        s_Intake.m_barMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, Constants.Intake.forwardAmpLim);
+        System.out.println("Start IntakeAmp");
         s_Intake.setDeploy(true);
-        s_Intake.startIntake();
         this.bHold = true;
         this.end = false;
         timer = new Timer();
-        theLEDs.setMode("IO");
+        theLEDs.setMode("IA");
         // timer.start();
     }
 
     @Override
     public void execute() {
         if (bHold) bHold = overrideButton.getAsBoolean();
-        if (!LIM.get() && !end) {
+        if (PushButton.getAsBoolean() && !end) {
             timer.start();
-            s_Intake.endIntake();
             end = true;
             System.out.println("End1");
-            theLEDs.setMode("IR");
-            System.out.println("set IR");
+            s_Intake.pushIntake(false);
+            // theLEDs.setMode("IR");
+            // System.out.println("set IR");
             
         }
         System.out.println(timer.get());
@@ -68,7 +72,9 @@ public class IntakeRun extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("End IntakeRun");
+        System.out.println("End IntakeAmp");
+        s_Intake.m_barMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, Constants.Intake.forwardLim);
+        s_Intake.pushIntake(true);
         if (end) {
             theLEDs.setMode("N");
             System.out.println("set N");

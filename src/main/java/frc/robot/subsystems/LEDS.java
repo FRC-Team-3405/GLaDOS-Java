@@ -7,10 +7,11 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 
-public class LEDS {
+public class LEDS{
     
     private AddressableLED m_led;
     private AddressableLEDBuffer m_ledBuffer;
@@ -98,72 +99,65 @@ public class LEDS {
 
     public void updateMode() {
         if (mode != lastMode) {
+            lastMode = mode;
+            /* 
+             * LED modes
+             * 
+             * D  BLUE,  Default Drive Mode
+             * IO RED,   Intake out, running intake
+             * IR ORANGE Intake Stowing
+             * IF PURPLE Intake Fixing 
+             * IA PINK   Intake Amp
+             * N  YELLOW Note Ready
+             * LS GREEN  Launcher Spin Up
+             * L  AQUA   Launching
+             * 
+             */
             switch (mode) {
                 case "D":
                     SetFull(Constants.Mode.Colors.D);
+                    System.out.println("D");
+                    break;
                 case "IO":
-                    SetFull(Constants.Mode.Colors.I);
-                case "IL":
-                    SetFull(Constants.Mode.Colors.I);
+                    SetFull(Constants.Mode.Colors.IO);
+                    System.out.println("IO");
+                    break;
+                case "IR":
+                    SetFull(Constants.Mode.Colors.IR);
+                    System.out.println("IR");
+                    break;
+                case "IF":
+                    SetFull(Constants.Mode.Colors.IF);
+                    System.out.println("IF");
+                    break;
+                case "IA":
+                    SetFull(Constants.Mode.Colors.IA);
+                    System.out.println("IA");
+                    break;
                 case "N":
-                    SetFull(Constants.Mode.Colors.R);
-                case "R":
-                    SetFull(Constants.Mode.Colors.R);
-                case "K":
-                    SetFull(Constants.Mode.Colors.K);
-                case "KP":
-                    SetFull(Constants.Mode.Colors.KP);
+                    SetFull(Constants.Mode.Colors.N);
+                    System.out.println("N");
+                    break;
+                case "LS":
+                    SetFull(Constants.Mode.Colors.LS);
+                    System.out.println("LS");
+                    break;
                 case "L":
                     SetFull(Constants.Mode.Colors.L);
-                case "CE":
-                    SetFull(Constants.Mode.Colors.C);
-                case "CR":
-                    SetFull(Constants.Mode.Colors.C);
-                case "C":
-                    SetFull(Constants.Mode.Colors.C);
-                case "CL":
-                    SetFull(Constants.Mode.Colors.C);
+                    System.out.println("L");
+                    break;
                 default:
                     break;
             }
         }
-
-        if(timer.get() >= nextBlink) {
-            blink = !blink;
-            switch (mode) {
-                case "IO":
-                    if(blink) SetFull(Constants.Mode.Colors.I);
-                    else SetFull(Constants.Mode.Colors.IO);
-                case "R":
-                    if(blink) SetFull(Constants.Mode.Colors.I);
-                    else SetFull(Constants.Mode.Colors.IO);
-                case "CE":
-                    if(blink) SetFull(Constants.Mode.Colors.C);
-                    else SetFull(Constants.Mode.Colors.CE);
-                case "CR":
-                    if(blink) SetFull(Constants.Mode.Colors.C);
-                    else SetFull(Constants.Mode.Colors.CR);
-                case "C":
-                    if(blink) SetFull(Constants.Mode.Colors.C);
-                    else SetFull(Constants.Mode.Colors.CC);
-                case "CL":
-                    if(blink) SetFull(Constants.Mode.Colors.C);
-                    else SetFull(Constants.Mode.Colors.CL);
-                default:
-                    break;
-            }
-
-        }
-
-
-
     }
 
     public void setMode(String modeID) {
-        String[] vModes = {"D","IO","IL","N","R","K","KP","L","CE","CR","C","CL"};
+        String[] vModes = {"D","IO","IR","IF","IA","N","LS","L"};
         if (Arrays.asList(vModes).contains(modeID)) {
             mode = modeID;
         }
+        this.updateMode();
     }
 
     public String getMode() {
