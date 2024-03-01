@@ -14,7 +14,7 @@ public class IntakeDefault extends Command {
     private Boolean first;
 
     /**
-     * Run intake untill note is obtained or manualy disabled
+     * Run intake until note is obtained or manualy disabled
      * 
      * @param s_Intake Intake object
      */
