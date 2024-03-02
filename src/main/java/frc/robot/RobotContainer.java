@@ -53,9 +53,6 @@ public class RobotContainer {
     private final Joystick driver = new Joystick(0);
     private final XboxController secondary = new XboxController(1);
 
-    // FALLOVER JUST IN CASE MAIN CONTROLLER FAILS! PLZ CHECK MY SYNTAX SINCE MY COMPUTER DOES NOT HAVE ALL OF THE NESSESARY THINGS INSTALLED :D
-    private boolean main_failed = false;
-
     private final PowerDistribution PDP = new PowerDistribution();
 
     // /* XBOX CONTROLOR */
@@ -113,34 +110,6 @@ public class RobotContainer {
      *      this is the main class most things stem from. only thing above this is the robot.java that 
      *      connects this to the driverstation
     */
-    private double getTranslationAxisMaybe() {
-        if (main_failed) {
-            return secondary.getRawAxis(sLy);
-        }
-        return -driver.getRawAxis(translationAxis);
-    }
-
-    private double getStrafeAxisMaybe() {
-        if (main_failed) {
-            return secondary.getRawAxis(sLX);
-        }
-        return -driver.getRawAxis(strafeAxis);
-    }
-
-    private double getRotationAxisMaybe() {
-        if (main_failed) {
-            return secondary.getRawAxis(sRX);
-        }
-        return -driver.getRawAxis(rotationAxis);
-    }
-
-    private double getThrottleAxisMaybe() {
-        if (main_failed) {
-            return 1.00;
-        }
-        return -driver.getRawAxis(throttleAxis);
-    }
-
     public RobotContainer() {
         /**sets the Teleop command, uses TeleopSwever class to connect the swerve drive and controls
          * runs the Swerve.Drive() function periodicly 
@@ -148,10 +117,10 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> getTranslationAxisMaybe(), 
-                () -> getStrafeAxisMaybe(), 
-                () -> getRotationAxisMaybe(), 
-                () -> getThrottleAxisMaybe(), 
+                () -> -driver.getRawAxis(translationAxis), 
+                () -> -driver.getRawAxis(strafeAxis), 
+                () -> -driver.getRawAxis(rotationAxis), 
+                () -> -driver.getRawAxis(throttleAxis), 
                 () -> robotCentric.getAsBoolean(),
                 theLEDs
             )
@@ -239,18 +208,7 @@ public class RobotContainer {
         new JoystickButton(secondary, 2).onTrue(new IntakeRun(intake, LIM, new JoystickButton(secondary, 2),theLEDs));
         new JoystickButton(secondary, 3).onTrue(new IntakeFix(intake, LIM, new JoystickButton(secondary, 3),new JoystickButton(secondary, 6),theLEDs));
         new JoystickButton(secondary, 1).onTrue(new IntakeAmp(intake, LIM, new JoystickButton(secondary, 1), new JoystickButton(secondary, 6),theLEDs));
-<<<<<<< Updated upstream
-
-        // NEW STUFF I ADDED! PLZ CHECK BECAUSE I KNOW I DID NOT DO THIS RIGHT! 
-        //I DONT WANT TO SHOVE THIS IN A RANDOM COMMAND FOR FEAR THAT IT WILL NO LONGER BE ABLE TO ACCESS THE main_failed VARIABLE
-        if (secondary.getLeftBumperPressed() && main_failed) {
-            main_failed = false;
-        } else {
-            main_failed = true;
-        }
-=======
         new JoystickButton(secondary, 8).onTrue(smartLaunch());
->>>>>>> Stashed changes
     }
 
     public void updateInfo() {
