@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -22,8 +23,8 @@ public final class Constants {
         COTSTalonFXSwerveConstants.SDS.MK4i.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(24.5); //TODOx: This must be tuned to specific robot
-        public static final double wheelBase = Units.inchesToMeters(24.5); //TODOx: This must be tuned to specific robot
+        public static final double trackWidth = Units.inchesToMeters(16.75); //TODO: This must be tuned to specific robot
+        public static final double wheelBase = Units.inchesToMeters(16.75); //TODO: This must be tuned to specific robot
         public static final double wheelCircumference = chosenModule.wheelCircumference;
 
         /* Swerve Kinematics 
@@ -129,9 +130,97 @@ public final class Constants {
         }
     }
 
+    public static final class Intake {
+        public static final int RollerCAN1 = 9;
+        public static final int RollerCAN2 = 10;
+        public static final int ActuatorCAN = 11;
+        
+        public static final int forwardLim = 60;
+        public static final int forwardAmpLim = 30;
+        public static final int reversLim = 0;
+    
+        public static final double noteDetectionDistance = 30;
+        public static final double barP = 5e-5;
+        public static final double barI = 1e-6;
+        public static final double barD = 0;
+    
+        public static final double barMaxOut = 1;
+        public static final double barMinOut = -1;
+    
+        public static final double barMaxRPM = 570;
+        public static final double barMaxVel = 200;
+        public static final double barMaxAcc = 150;
+    
+        public static final double barOutPoint = 1000;
+        public static final double barInPoint = -1000;
+    
+        public static final double intakeVel = 0.8;
+        public static final double intakeNudge = 0.2;
+
+        public static final double acuateVel = 0.8;
+        public static final double acuateManual = 0.2;
+
+        public static final double OverRun = 0.75;
+    }
+      public static final class Launcher {
+        public static final int RightCAN = 13;
+        public static final int LeftCAN = 12;
+    
+        public static final double LaunchV = 100;
+        public static final double LaunchP = 1;
+    
+        public static final double LaunchASAPTime = 1;
+        public static final double LaunchStopTime = 1;
+    
+        public static final double P = 0.08;
+        public static final double I = 0.05;
+        public static final double D = 0.00;
+    
+        public static final double FF = 0.000156;
+    
+        public static final double MaxOut = 1;
+        public static final double MinOut = -1;
+    
+        public static final double MaxRPM = 2000;
+        public static final double MaxVel = 1500;
+        public static final double MaxAcc = 500;
+    
+        public static final double OutPoint = 1000;
+        public static final double InPoint = -1000;
+    }
+
+    // holds constants for mode system
+    public static final class Mode {
+        public static final double blinkTime = 5.0;
+        // Mode modifiers, in percentages, controlor input is multiplied by these
+        // max forward speed (1) * 40% speed (.40) = .40 output
+        public static final class Modifiers {
+            public static final class Intake {
+                public static final double driveSpeed = 0.4;
+                public static final double rotSpeed = 0.4;
+            }
+            public static final class Lock {
+                public static final double driveSpeed = 0.3;
+                public static final double rotSpeed = 0.0;
+            }
+        }
+
+        public static final class Colors {
+            public static final Color D = Color.kBlue;    // Default Color
+            public static final Color IO = Color.kRed;    // Intake Out Color
+            public static final Color IF = Color.kPurple; // Intake Fix Color
+            public static final Color IR = Color.kOrange; // Intake Retracting Color
+            public static final Color IA = Color.kPink;   // Intake Amp Color
+            public static final Color N = Color.kYellow;  // Note Color
+            public static final Color LS = Color.kGreen;  // Launcher Spinup Color
+            public static final Color L = Color.kAqua;     // Color Color
+            public static final Color DIS = Color.kPurple; //Disable Color
+        }
+    }
+
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 2;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 2;
+        public static final double kMaxSpeedMetersPerSecond = 1;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     
@@ -144,4 +233,5 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
 }

@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.9029392417759192,
+        "y": 4.256672217048139
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.1602106395095981,
+        "y": 4.256672217048139
+      },
+      "isLocked": false,
+      "linkedName": "BTM SHOOT"
+    },
+    {
+      "anchor": {
+        "x": 2.4699559370628714,
+        "y": 4.128036518181299
+      },
+      "prevControl": {
+        "x": 1.6981417438618356,
+        "y": 4.139730672623739
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.15,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "RunIntake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "BTM",
+  "previewStartingState": {
+    "rotation": -57.17145820858741,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

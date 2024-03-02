@@ -4,11 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.Orchestra;
-import com.ctre.phoenix6.hardware.TalonFX;
-
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -51,11 +46,14 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    m_robotContainer.updateInfo();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_robotContainer.disabledInit();
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -87,6 +85,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.teleopInit();
   }
 
   /** This function is called periodically during operator control. */
@@ -107,4 +106,5 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     m_robotContainer.testPeriodic();
   }
+
 }

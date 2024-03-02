@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Band {
 
-    private Orchestra _orchestra;
+    public Orchestra orchestra;
     private List<String> songs;
 
     TalonFX[] _fxes = {
@@ -33,10 +33,10 @@ public class Band {
     public Band() {
         songs = new ArrayList<String>();
 
-        _orchestra = new Orchestra();
+        orchestra = new Orchestra();
 
         for (TalonFX motor : _fxes) {
-        _orchestra.addInstrument(motor);
+        orchestra.addInstrument(motor);
         }
 
         File[] musicFiles = new File(Filesystem.getDeployDirectory(), "music").listFiles();
@@ -64,7 +64,7 @@ public class Band {
      * @param songName song file name with .chrp extention.
      */
     public void play(String songName){
-        _orchestra.loadMusic("music/"+songName);
-        _orchestra.play();
+        orchestra.loadMusic("music/"+songName);
+        orchestra.play();
     }
 }
