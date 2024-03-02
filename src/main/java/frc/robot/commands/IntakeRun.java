@@ -60,6 +60,7 @@ public class IntakeRun extends Command {
             System.out.println("End1");
             theLEDs.setMode("IR");
             System.out.println("set IR");
+            s_Intake.lightPull(false);
             
         }
         System.out.println(timer.get());
@@ -69,6 +70,7 @@ public class IntakeRun extends Command {
     @Override
     public void end(boolean interrupted) {
         System.out.println("End IntakeRun");
+        s_Intake.lightPull(true);
         if (end) {
             theLEDs.setMode("N");
             System.out.println("set N");

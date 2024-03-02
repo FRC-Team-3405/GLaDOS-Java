@@ -132,6 +132,28 @@ public class Intake extends SubsystemBase{
         }
     }
 
+    public void lightPull(boolean stop) {
+        if(!stop) {
+        m_intakeMotor1.set(VictorSPXControlMode.PercentOutput, Constants.Intake.intakeNudge);
+        m_intakeMotor2.set(VictorSPXControlMode.PercentOutput, Constants.Intake.intakeNudge);
+        } else {
+        m_intakeMotor1.set(VictorSPXControlMode.PercentOutput, 0);
+        m_intakeMotor2.set(VictorSPXControlMode.PercentOutput, 0);
+        }
+
+    }
+    
+    public void lightPush(boolean stop) {
+        if(!stop) {
+        m_intakeMotor1.set(VictorSPXControlMode.PercentOutput, Constants.Intake.intakeNudge);
+        m_intakeMotor2.set(VictorSPXControlMode.PercentOutput, Constants.Intake.intakeNudge);
+        } else {
+        m_intakeMotor1.set(VictorSPXControlMode.PercentOutput, 0);
+        m_intakeMotor2.set(VictorSPXControlMode.PercentOutput, 0);
+        }
+
+    }
+
     public void nudge() {
         if (secondaryController.getPOV() != -1) {
             System.out.println(secondaryController.getPOV());

@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8795509328910394,
-        "y": 6.689056341075646
+        "x": 0.9029392417759192,
+        "y": 4.256672217048139
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9889153137819633,
-        "y": 6.199087072848821
+        "x": 1.9029392417759181,
+        "y": 4.256672217048139
       },
       "isLocked": false,
-      "linkedName": "TOP SHOOT"
+      "linkedName": "BTM SHOOT"
     },
     {
       "anchor": {
-        "x": 2.917573402714373,
-        "y": 6.286398158381903
+        "x": 7.942820216124763,
+        "y": 2.4440782784699477
       },
       "prevControl": {
-        "x": 2.5200511662284586,
-        "y": 6.304887564730085
-      },
-      "nextControl": {
-        "x": 3.2793314510542197,
-        "y": 6.269572202645167
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 8.001290988336962,
-        "y": 5.88215968454729
-      },
-      "prevControl": {
-        "x": 7.104554780450131,
-        "y": 6.0393196385068375
+        "x": 5.416882856557737,
+        "y": 0.2338830888487989
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,21 +30,28 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.4,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 0.0,
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": 7.329212122874697,
       "rotateFast": false
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.8,
+      "constraints": {
+        "maxVelocity": 5.5,
+        "maxAcceleration": 5.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 1.15,
+      "name": "Intake",
+      "waypointRelativePos": 0.55,
       "command": {
         "type": "parallel",
         "data": {
@@ -84,13 +75,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -14.62087398863165,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "TOP",
+  "folder": "BTM",
   "previewStartingState": {
-    "rotation": 26.872647952447924,
+    "rotation": -57.17145820858741,
     "velocity": 0
   },
   "useDefaultConstraints": true

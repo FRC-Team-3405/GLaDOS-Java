@@ -9,6 +9,7 @@ import org.opencv.imgproc.Imgproc;
 import com.ctre.phoenix6.Orchestra;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -159,6 +160,7 @@ public class RobotContainer {
         intake.setDefaultCommand(new IntakeDefault(intake,LIM));
 
         NamedCommands.registerCommand("RunIntake", new IntakeRun(intake, LIM, new JoystickButton(secondary, 3), theLEDs));
+        NamedCommands.registerCommand("EndIntake", new IntakeDefault(intake, LIM));
         NamedCommands.registerCommand("LaunchASAP", new LaunchASAP(intake,launcher,theLEDs));
 
 
@@ -167,7 +169,7 @@ public class RobotContainer {
 
         //Build the auto chooser
         // autoChooser = AutoBuilder.buildAutoChooser();
-        autoChooser = AutoBuilder.buildAutoChooser("MidMain");
+        autoChooser = AutoBuilder.buildAutoChooser("Btm4");
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         musiChooser = theBand.Buildchoser();
@@ -232,10 +234,12 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /** Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        new JoystickButton(secondary, 4).onTrue(new LaunchASAP(intake,launcher,theLEDs));
+        // new JoystickButton(secondary, 4).onTrue(new LaunchASAP(intake,launcher,theLEDs));
+        new JoystickButton(secondary, 4).onTrue(new LaunchControled(intake,launcher,theLEDs,new JoystickButton(secondary, 4),new JoystickButton(secondary, 6)));
         new JoystickButton(secondary, 2).onTrue(new IntakeRun(intake, LIM, new JoystickButton(secondary, 2),theLEDs));
-        new JoystickButton(secondary, 3).onTrue(new IntakeFix(intake, LIM, new JoystickButton(secondary, 3),theLEDs));
+        new JoystickButton(secondary, 3).onTrue(new IntakeFix(intake, LIM, new JoystickButton(secondary, 3),new JoystickButton(secondary, 6),theLEDs));
         new JoystickButton(secondary, 1).onTrue(new IntakeAmp(intake, LIM, new JoystickButton(secondary, 1), new JoystickButton(secondary, 6),theLEDs));
+<<<<<<< Updated upstream
 
         // NEW STUFF I ADDED! PLZ CHECK BECAUSE I KNOW I DID NOT DO THIS RIGHT! 
         //I DONT WANT TO SHOVE THIS IN A RANDOM COMMAND FOR FEAR THAT IT WILL NO LONGER BE ABLE TO ACCESS THE main_failed VARIABLE
@@ -244,11 +248,15 @@ public class RobotContainer {
         } else {
             main_failed = true;
         }
+=======
+        new JoystickButton(secondary, 8).onTrue(smartLaunch());
+>>>>>>> Stashed changes
     }
 
     public void updateInfo() {
         SmartDashboard.putBoolean("IntakeDeployed", intake.getMode());
         SmartDashboard.putBoolean("Note", LIM.get());
+        SmartDashboard.putBoolean("Launcher Spin", launcher.spin);
 
         // {"D","IO","IR","L","LS"};
         SmartDashboard.putBoolean("D", theLEDs.getMode() == "D");
@@ -267,13 +275,12 @@ public class RobotContainer {
         SmartDashboard.putBoolean("ControlorB", new JoystickButton(secondary, 2).getAsBoolean());
         SmartDashboard.putBoolean("ControlorX", new JoystickButton(secondary, 3).getAsBoolean());
 
-        SmartDashboard.putData(PDP);
-        System.out.println("Radio");
-        System.out.println(PDP.getCurrent(15));
-        System.out.println("RIO");
-        System.out.println(PDP.getCurrent(20));
-        System.out.println("Total");
-        System.out.println(PDP.getTotalCurrent());
+        // System.out.println("Radio");
+        // System.out.println(PDP.getCurrent(15));
+        // System.out.println("RIO");
+        // System.out.println(PDP.getCurrent(20));
+        // System.out.println("Total");
+        // System.out.println(PDP.getTotalCurrent());
 
         intake.updateData();
 
@@ -299,6 +306,14 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
+    }
+
+    public Command smartLaunch() {
+        // Load the path you want to follow using its name in the GUI
+        PathPlannerPath path = PathPlannerPath.fromPathFile("Example Path");
+
+        // Create a path following command using AutoBuilder. This will also trigger event markers.
+        return AutoBuilder.followPath(path);
     }
 
     public void teleopInit() {

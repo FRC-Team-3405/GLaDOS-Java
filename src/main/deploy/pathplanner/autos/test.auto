@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2,
-      "y": 2
+      "x": 1.183598948394478,
+      "y": 5.5430292057165325
     },
     "rotation": 0
   },
@@ -14,12 +14,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Swaws"
+            "pathName": "M-SHOOT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchASAP"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "TEST",
   "choreoAuto": false
 }

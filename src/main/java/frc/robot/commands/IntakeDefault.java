@@ -42,7 +42,7 @@ public class IntakeDefault extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("Start IntakeDefault");
+        System.out.println("End IntakeDefault");
     }
 
     @Override

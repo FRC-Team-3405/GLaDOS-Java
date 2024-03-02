@@ -169,7 +169,7 @@ public final class Constants {
         public static final double LaunchV = 100;
         public static final double LaunchP = 1;
     
-        public static final double LaunchASAPTime = 2;
+        public static final double LaunchASAPTime = 1;
         public static final double LaunchStopTime = 1;
     
         public static final double P = 0.08;

@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.PubSub;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -8,7 +9,6 @@ import java.util.function.BooleanSupplier;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.LEDS;
 
 public class IntakeFix extends Command {
@@ -16,9 +16,11 @@ public class IntakeFix extends Command {
     private Intake s_Intake;
     private DigitalInput LIM;
     private JoystickButton overrideButton;
+    private JoystickButton pushButton;
     // private Boolean end;
     private Boolean bHold;
     private Boolean end;
+    private Boolean push;
     private Timer timer;
     private LEDS theLEDs;
 
@@ -27,13 +29,15 @@ public class IntakeFix extends Command {
      * 
      * @param s_Intake Intake object
      */
-    public IntakeFix(Intake s_Intake, DigitalInput LIM, JoystickButton overrideButton, LEDS theLEDs) {
+    public IntakeFix(Intake s_Intake, DigitalInput LIM, JoystickButton overrideButton, JoystickButton pushButton, LEDS theLEDs) {
         this.s_Intake = s_Intake;
         this.LIM = LIM;
         this.overrideButton = overrideButton;
         this.theLEDs = theLEDs;
+        this.pushButton = pushButton;
         // this.end = false;
         this.bHold = true;
+        this.push = false;
         this.end = false;
         addRequirements(s_Intake);
     }
@@ -43,27 +47,39 @@ public class IntakeFix extends Command {
         // tell the intake to extend
         System.out.println("Start IntakeFix");
         s_Intake.setDeploy(true);
+        // s_Intake.startIntake();
         this.bHold = true;
         this.end = false;
+        this.push = false;
         timer = new Timer();
         theLEDs.setMode("IF");
-        System.out.println("set IF");
         // timer.start();
     }
 
     @Override
     public void execute() {
         if (bHold) bHold = overrideButton.getAsBoolean();
+        if (!LIM.get() && !end) {
+            timer.start();
+            // s_Intake.endIntake();
+            end = true;
+            System.out.println("End1");
+            theLEDs.setMode("IR");
+            System.out.println("set IR");
+            s_Intake.lightPull(false);
+        }
+
         s_Intake.nudge();
-        s_Intake.manualAcuation();
+
         System.out.println(timer.get());
         System.out.println(timer.get() >= Constants.Intake.OverRun);
     }
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("End IntakeFix");
-        if (!LIM.get()) {
+        System.out.println("End IntakeRun");
+        s_Intake.lightPull(true);
+        if (end) {
             theLEDs.setMode("N");
             System.out.println("set N");
         } else {

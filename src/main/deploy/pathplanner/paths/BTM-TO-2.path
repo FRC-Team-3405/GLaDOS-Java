@@ -3,34 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.183598948394478,
-        "y": 5.5430292057165325
+        "x": 0.9029392417759192,
+        "y": 4.256672217048139
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2435065695868026,
-        "y": 5.546357406893884
+        "x": 1.9029392417759186,
+        "y": 4.256672217048139
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BTM SHOOT"
     },
     {
       "anchor": {
-        "x": 1.5928943538798759,
-        "y": 5.5430292057165325
+        "x": 2.4699559370628714,
+        "y": 5.601499977928731
       },
       "prevControl": {
-        "x": 1.5333576812770562,
-        "y": 5.535587121641179
+        "x": 1.4699559370628714,
+        "y": 5.601499977928731
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MID SHOOT"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -43,9 +54,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "MID",
+  "folder": "BTM",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -57.17145820858741,
     "velocity": 0
   },
   "useDefaultConstraints": true

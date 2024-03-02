@@ -9,20 +9,24 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDS;
 import frc.robot.subsystems.Launcher;
 
-public class LaunchASAP extends Command{
+public class LaunchControled extends Command{
     private Intake s_Intake;
     private Launcher s_Launcher;
     private Timer timer;
     private boolean launch;
     private LEDS theLEDs;
+    private JoystickButton overrideButton;
+    private JoystickButton launchButton;
 
 
-    public LaunchASAP(Intake s_Intake, Launcher s_Launcher, LEDS theLEDs) {
+    public LaunchControled(Intake s_Intake, Launcher s_Launcher, LEDS theLEDs, JoystickButton overrideButton, JoystickButton launchButton) {
         this.s_Intake = s_Intake;
         this.s_Launcher = s_Launcher;
         this.timer = new Timer();
         this.launch = false;
         this.theLEDs = theLEDs;
+        this.overrideButton = overrideButton;
+        this.launchButton = launchButton;
 
         addRequirements(s_Intake);
         addRequirements(s_Launcher);
@@ -31,10 +35,10 @@ public class LaunchASAP extends Command{
     @Override
     public void initialize() {
         timer = new Timer();
-        timer.start();
+        // timer.start();
         launch = false;
-        s_Launcher.startLaunch();
         s_Intake.lightPull(false);
+        s_Launcher.startLaunch();
         System.out.println("Start LaunchASAP");
         theLEDs.setMode("LS");
         System.out.println("set LS");
@@ -44,8 +48,8 @@ public class LaunchASAP extends Command{
     @Override
     public void execute() {
         
-        // System.out.println(timer.get());
-        if(timer.get() >= Constants.Launcher.LaunchASAPTime && !launch) {
+        if (launchButton.getAsBoolean()) {
+            timer.start();
             launch = true;
             theLEDs.setMode("L");
             System.out.println("set L");
@@ -58,13 +62,13 @@ public class LaunchASAP extends Command{
     public void end(boolean interrupted) {
         s_Launcher.endLaunch();
         s_Intake.pushIntake(true);
-        System.out.println("End LaunchASAP");
+        System.out.println("End LaunchControled");
         theLEDs.setMode("D");
         System.out.println("set D");
     }
 
     @Override
     public boolean isFinished() {
-        return (timer.get() >= (Constants.Launcher.LaunchASAPTime+Constants.Launcher.LaunchStopTime) && launch);
+        return (timer.get() >= (Constants.Launcher.LaunchStopTime) && launch);
     }
 }

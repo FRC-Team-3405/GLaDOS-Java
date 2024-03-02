@@ -1,14 +1,26 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.8795509328910394,
+      "y": 6.689056341075646
+    },
+    "rotation": 56.907309424713056
+  },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "M-SHOOT"
+            "name": "LaunchASAP"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.0
           }
         },
         {
@@ -20,37 +32,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M-TO-2"
+            "pathName": "T-SHOOT"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "M-SHOOT"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LaunchASAP"
+            "pathName": "T-TO-2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "M-TO-3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M-SHOOT"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LaunchASAP"
+            "pathName": "T-SHOOT"
           }
         }
       ]

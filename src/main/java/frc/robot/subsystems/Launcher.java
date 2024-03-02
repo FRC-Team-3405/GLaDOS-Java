@@ -19,6 +19,7 @@ public class Launcher extends SubsystemBase {
     public SparkPIDController m_RPID;
     public CANSparkMax m_launcherLeft;
     public SparkPIDController m_LPID;
+    public boolean spin;
 
     public Intake s_Intake;
     
@@ -28,6 +29,7 @@ public class Launcher extends SubsystemBase {
 
         m_launcherLeft.restoreFactoryDefaults();
         m_launcherRight.restoreFactoryDefaults();
+        spin = false;
     }
 
 
@@ -35,11 +37,13 @@ public class Launcher extends SubsystemBase {
         System.out.println("start launch");
         m_launcherLeft.set(-Constants.Launcher.LaunchP);
         m_launcherRight.set(Constants.Launcher.LaunchP);
+        spin = true;
     }
 
     public void endLaunch() {
         m_launcherLeft.set(0);
         m_launcherRight.set(0);
+        spin = false;
     }
 
     
