@@ -24,6 +24,29 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+
+
+/*
+double X_from_camera = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[0]);
+double Y_from_camera = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[1]);
+double X_rotation_from_camera = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[1]); 
+if (X_from_camera <= 0.5) {
+    if (X_from_camera >= 2) {
+        swerve_X_speed = 1;
+    } else {
+        swerve_X_speed = 1.5 / X_from_camera - 1;
+    }
+} else if (X_from_camera >= -0.5) {
+    if (X_from_camera <= -2) {
+        swerve_X_speed = -1;
+    } else {
+        swerve_X_speed = 1.5 / X_from_camera + 1;
+    }
+} else {
+    
+}
+*/
+
 public class Swerve extends SubsystemBase {
     // Delcare variables
     public SwerveDriveOdometry swerveOdometry;
