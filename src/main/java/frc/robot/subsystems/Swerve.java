@@ -25,8 +25,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
-
-/*
+/* 
+NetworkTableInstance.getDefault().getTable("limelight").getEntry("priorityid").setNumber(8);
+int tag_id = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getNumber();
 double X_from_camera = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[0]);
 double Y_from_camera = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[1]);
 double X_rotation_from_camera = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[1]); 
@@ -43,6 +44,26 @@ if (X_from_camera <= 0.5) {
         swerve_X_speed = 1.5 / X_from_camera + 1;
     }
 } else {
+    shoot_x = true;
+}
+
+if (Y_from_camera <= 0.5) {
+    if (Y_from_camera >= 2) {
+        swerve_Y_speed = 1;
+    } else {
+        swerve_Y_speed = 1.5 / Y_from_camera - 1;
+    }
+} else if (Y_from_camera >= -0.5) {
+    if (Y_from_camera <= -2) {
+        swerve_Y_speed = -1;
+    } else {
+        swerve_Y_speed = 1.5 / Y_from_camera + 1;
+    }
+} else {
+    shoot_y = true;
+}
+
+if (shoot_y && shoot_x) {
     shoot
 }
 */
