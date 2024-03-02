@@ -43,7 +43,7 @@ if (X_from_camera <= 0.5) {
         swerve_X_speed = 1.5 / X_from_camera + 1;
     }
 } else {
-    
+    shoot
 }
 */
 
