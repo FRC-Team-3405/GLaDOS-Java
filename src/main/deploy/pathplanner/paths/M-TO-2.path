@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.791694979401355,
-        "y": 5.5884625760165525
+        "x": 1.663059280534515,
+        "y": 5.55472336015897
       },
       "isLocked": false,
       "linkedName": "MID SHOOT"
@@ -20,8 +20,8 @@
         "y": 5.556066607628711
       },
       "prevControl": {
-        "x": 2.388096855965792,
-        "y": 5.5430292057165325
+        "x": 1.943718987153074,
+        "y": 5.55472336015897
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +29,19 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
       "name": "Intake",

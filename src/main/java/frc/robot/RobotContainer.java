@@ -37,6 +37,8 @@ import java.util.List;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Launcher;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -138,7 +140,7 @@ public class RobotContainer {
 
         //Build the auto chooser
         // autoChooser = AutoBuilder.buildAutoChooser();
-        autoChooser = AutoBuilder.buildAutoChooser("Btm4");
+        autoChooser = AutoBuilder.buildAutoChooser("Mid4");
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         musiChooser = theBand.Buildchoser();
@@ -208,7 +210,7 @@ public class RobotContainer {
         new JoystickButton(secondary, 2).onTrue(new IntakeRun(intake, LIM, new JoystickButton(secondary, 2),theLEDs));
         new JoystickButton(secondary, 3).onTrue(new IntakeFix(intake, LIM, new JoystickButton(secondary, 3),new JoystickButton(secondary, 6),theLEDs));
         new JoystickButton(secondary, 1).onTrue(new IntakeAmp(intake, LIM, new JoystickButton(secondary, 1), new JoystickButton(secondary, 6),theLEDs));
-        new JoystickButton(secondary, 8).onTrue(smartLaunch());
+        new JoystickButton(driver, 3).onTrue(smartLaunch());
     }
 
     public void updateInfo() {
@@ -268,7 +270,8 @@ public class RobotContainer {
 
     public Command smartLaunch() {
         // Load the path you want to follow using its name in the GUI
-        PathPlannerPath path = PathPlannerPath.fromPathFile("Example Path");
+        PathPlannerPath path = PathPlannerPath.fromPathFile("SmartLaunchMid");
+        // PathPlannerPath path2 =
 
         // Create a path following command using AutoBuilder. This will also trigger event markers.
         return AutoBuilder.followPath(path);
