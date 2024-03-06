@@ -31,6 +31,7 @@ public class TargetSwerve extends Command {
     private boolean shoot_x;
     private boolean shoot_y;
     private boolean shoot;
+    private Boolean bHold;
 
 
     private LEDS led;
@@ -57,8 +58,15 @@ public class TargetSwerve extends Command {
         this.led = led;
     }
 
+    
+    @Override
+    public void initialize() {
+        this.bHold = true;
+    }
+
     @Override
     public void execute() {
+        if (bHold) bHold = overrideButton.getAsBoolean();
         /* Get Values, Deadband*/
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
@@ -81,13 +89,13 @@ public class TargetSwerve extends Command {
             if (X_from_camera >= 2) {
                 swerve_X_speed = 1;
             } else {
-                swerve_X_speed = 1.5 / X_from_camera - 1;
+                swerve_X_speed = 1.5 / X_from_camera + 1;
             }
         } else if (X_from_camera >= -0.5) {
             if (X_from_camera <= -2) {
                 swerve_X_speed = -1;
             } else {
-                swerve_X_speed = 1.5 / X_from_camera + 1;
+                swerve_X_speed = 1.5 / X_from_camera - 1;
             }
         } else {
             shoot_x = true;
@@ -97,13 +105,13 @@ public class TargetSwerve extends Command {
             if (Y_from_camera >= 2) {
                 swerve_Y_speed = 1;
             } else {
-                swerve_Y_speed = 1.5 / Y_from_camera - 1;
+                swerve_Y_speed = 1.5 / Y_from_camera + 1;
             }
         } else if (Y_from_camera >= -0.5) {
             if (Y_from_camera <= -2) {
                 swerve_Y_speed = -1;
             } else {
-                swerve_Y_speed = 1.5 / Y_from_camera + 1;
+                swerve_Y_speed = 1.5 / Y_from_camera - 1;
             }
         } else {
             shoot_y = true;
@@ -124,6 +132,6 @@ public class TargetSwerve extends Command {
 
     @Override
     public boolean isFinished() {
-        return overrideButton.getAsBoolean();
+        return (overrideButton.getAsBoolean() && !bHold);
     }
 }

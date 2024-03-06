@@ -214,10 +214,10 @@ public class RobotContainer {
         new JoystickButton(driver, 4).onTrue(
             new TargetSwerve(
                 s_Swerve, 
-                () -> getTranslationAxisMaybe(), 
-                () -> getStrafeAxisMaybe(), 
-                () -> getRotationAxisMaybe(), 
-                () -> getThrottleAxisMaybe(), 
+                () -> -driver.getRawAxis(translationAxis), 
+                () -> -driver.getRawAxis(strafeAxis), 
+                () -> -driver.getRawAxis(rotationAxis), 
+                () -> -driver.getRawAxis(throttleAxis), 
                 () -> robotCentric.getAsBoolean(),
                 theLEDs,
                 new JoystickButton(driver, 4)
