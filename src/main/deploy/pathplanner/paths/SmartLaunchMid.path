@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.183598948394478,
-        "y": 5.5430292057165325
+        "x": 1.160210639509598,
+        "y": 5.531335051274091
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2435065695868026,
-        "y": 5.546357406893884
+        "x": 1.5812001994374358,
+        "y": 5.55472336015897
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 5.5430292057165325
       },
       "prevControl": {
-        "x": 1.5333576812770562,
-        "y": 5.535587121641179
+        "x": 1.3005404928188773,
+        "y": 5.5430292057165325
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,25 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "LaunchASAP"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -43,7 +61,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "MID",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

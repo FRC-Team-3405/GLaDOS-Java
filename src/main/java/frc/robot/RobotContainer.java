@@ -9,6 +9,7 @@ import org.opencv.imgproc.Imgproc;
 import com.ctre.phoenix6.Orchestra;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -36,6 +37,8 @@ import java.util.List;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Launcher;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -51,9 +54,6 @@ public class RobotContainer {
 
     private final Joystick driver = new Joystick(0);
     private final XboxController secondary = new XboxController(1);
-
-    // FALLOVER JUST IN CASE MAIN CONTROLLER FAILS! PLZ CHECK MY SYNTAX SINCE MY COMPUTER DOES NOT HAVE ALL OF THE NESSESARY THINGS INSTALLED :D
-    private boolean main_failed = false;
 
     private final PowerDistribution PDP = new PowerDistribution();
 
@@ -112,34 +112,6 @@ public class RobotContainer {
      *      this is the main class most things stem from. only thing above this is the robot.java that 
      *      connects this to the driverstation
     */
-    private double getTranslationAxisMaybe() {
-        if (main_failed) {
-            return secondary.getRawAxis(sLy);
-        }
-        return -driver.getRawAxis(translationAxis);
-    }
-
-    private double getStrafeAxisMaybe() {
-        if (main_failed) {
-            return secondary.getRawAxis(sLX);
-        }
-        return -driver.getRawAxis(strafeAxis);
-    }
-
-    private double getRotationAxisMaybe() {
-        if (main_failed) {
-            return secondary.getRawAxis(sRX);
-        }
-        return -driver.getRawAxis(rotationAxis);
-    }
-
-    private double getThrottleAxisMaybe() {
-        if (main_failed) {
-            return 1.00;
-        }
-        return -driver.getRawAxis(throttleAxis);
-    }
-
     public RobotContainer() {
         /**sets the Teleop command, uses TeleopSwever class to connect the swerve drive and controls
          * runs the Swerve.Drive() function periodicly 
@@ -147,10 +119,10 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> getTranslationAxisMaybe(), 
-                () -> getStrafeAxisMaybe(), 
-                () -> getRotationAxisMaybe(), 
-                () -> getThrottleAxisMaybe(), 
+                () -> -driver.getRawAxis(translationAxis), 
+                () -> -driver.getRawAxis(strafeAxis), 
+                () -> -driver.getRawAxis(rotationAxis), 
+                () -> -driver.getRawAxis(throttleAxis), 
                 () -> robotCentric.getAsBoolean(),
                 theLEDs
             )
@@ -159,6 +131,7 @@ public class RobotContainer {
         intake.setDefaultCommand(new IntakeDefault(intake,LIM));
 
         NamedCommands.registerCommand("RunIntake", new IntakeRun(intake, LIM, new JoystickButton(secondary, 3), theLEDs));
+        NamedCommands.registerCommand("EndIntake", new IntakeDefault(intake, LIM));
         NamedCommands.registerCommand("LaunchASAP", new LaunchASAP(intake,launcher,theLEDs));
 
 
@@ -167,7 +140,7 @@ public class RobotContainer {
 
         //Build the auto chooser
         // autoChooser = AutoBuilder.buildAutoChooser();
-        autoChooser = AutoBuilder.buildAutoChooser("MidMain");
+        autoChooser = AutoBuilder.buildAutoChooser("Mid4");
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         musiChooser = theBand.Buildchoser();
@@ -232,23 +205,18 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /** Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        new JoystickButton(secondary, 4).onTrue(new LaunchASAP(intake,launcher,theLEDs));
+        // new JoystickButton(secondary, 4).onTrue(new LaunchASAP(intake,launcher,theLEDs));
+        new JoystickButton(secondary, 4).onTrue(new LaunchControled(intake,launcher,theLEDs,new JoystickButton(secondary, 4),new JoystickButton(secondary, 6)));
         new JoystickButton(secondary, 2).onTrue(new IntakeRun(intake, LIM, new JoystickButton(secondary, 2),theLEDs));
-        new JoystickButton(secondary, 3).onTrue(new IntakeFix(intake, LIM, new JoystickButton(secondary, 3),theLEDs));
+        new JoystickButton(secondary, 3).onTrue(new IntakeFix(intake, LIM, new JoystickButton(secondary, 3),new JoystickButton(secondary, 6),theLEDs));
         new JoystickButton(secondary, 1).onTrue(new IntakeAmp(intake, LIM, new JoystickButton(secondary, 1), new JoystickButton(secondary, 6),theLEDs));
-
-        // NEW STUFF I ADDED! PLZ CHECK BECAUSE I KNOW I DID NOT DO THIS RIGHT! 
-        //I DONT WANT TO SHOVE THIS IN A RANDOM COMMAND FOR FEAR THAT IT WILL NO LONGER BE ABLE TO ACCESS THE main_failed VARIABLE
-        if (secondary.getLeftBumperPressed() && main_failed) {
-            main_failed = false;
-        } else {
-            main_failed = true;
-        }
+        new JoystickButton(driver, 3).onTrue(smartLaunch());
     }
 
     public void updateInfo() {
         SmartDashboard.putBoolean("IntakeDeployed", intake.getMode());
         SmartDashboard.putBoolean("Note", LIM.get());
+        SmartDashboard.putBoolean("Launcher Spin", launcher.spin);
 
         // {"D","IO","IR","L","LS"};
         SmartDashboard.putBoolean("D", theLEDs.getMode() == "D");
@@ -267,13 +235,12 @@ public class RobotContainer {
         SmartDashboard.putBoolean("ControlorB", new JoystickButton(secondary, 2).getAsBoolean());
         SmartDashboard.putBoolean("ControlorX", new JoystickButton(secondary, 3).getAsBoolean());
 
-        SmartDashboard.putData(PDP);
-        System.out.println("Radio");
-        System.out.println(PDP.getCurrent(15));
-        System.out.println("RIO");
-        System.out.println(PDP.getCurrent(20));
-        System.out.println("Total");
-        System.out.println(PDP.getTotalCurrent());
+        // System.out.println("Radio");
+        // System.out.println(PDP.getCurrent(15));
+        // System.out.println("RIO");
+        // System.out.println(PDP.getCurrent(20));
+        // System.out.println("Total");
+        // System.out.println(PDP.getTotalCurrent());
 
         intake.updateData();
 
@@ -299,6 +266,15 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
+    }
+
+    public Command smartLaunch() {
+        // Load the path you want to follow using its name in the GUI
+        PathPlannerPath path = PathPlannerPath.fromPathFile("SmartLaunchMid");
+        // PathPlannerPath path2 =
+
+        // Create a path following command using AutoBuilder. This will also trigger event markers.
+        return AutoBuilder.followPath(path);
     }
 
     public void teleopInit() {
