@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.7275269251393202,
+      "y": 4.630885159206216
+    },
+    "rotation": -60.10109816138542
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M-SHOOT"
+            "pathName": "BTM-SHOOT"
           }
         },
         {
@@ -20,13 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M-TO-2"
+            "pathName": "BTM-TO-M4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "M-SHOOT"
+            "pathName": "MB-TO-SHOOT"
           }
         },
         {
@@ -38,19 +44,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M-TO-3"
+            "pathName": "BTM-TO-M5"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "M-SHOOT"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LaunchASAP"
+            "pathName": "MB-TO-SHOOT"
           }
         }
       ]
