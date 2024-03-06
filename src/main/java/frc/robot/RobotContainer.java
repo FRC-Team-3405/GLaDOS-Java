@@ -33,6 +33,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.management.remote.TargetedNotification;
+
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -161,7 +163,6 @@ public class RobotContainer {
         NamedCommands.registerCommand("RunIntake", new IntakeRun(intake, LIM, new JoystickButton(secondary, 3), theLEDs));
         NamedCommands.registerCommand("LaunchASAP", new LaunchASAP(intake,launcher,theLEDs));
 
-
         // Configure the button bindings
         configureButtonBindings();
 
@@ -236,6 +237,17 @@ public class RobotContainer {
         new JoystickButton(secondary, 2).onTrue(new IntakeRun(intake, LIM, new JoystickButton(secondary, 2),theLEDs));
         new JoystickButton(secondary, 3).onTrue(new IntakeFix(intake, LIM, new JoystickButton(secondary, 3),theLEDs));
         new JoystickButton(secondary, 1).onTrue(new IntakeAmp(intake, LIM, new JoystickButton(secondary, 1), new JoystickButton(secondary, 6),theLEDs));
+        new JoystickButton(driver, 4).onTrue(
+            new TargetSwerve(
+                s_Swerve, 
+                () -> getTranslationAxisMaybe(), 
+                () -> getStrafeAxisMaybe(), 
+                () -> getRotationAxisMaybe(), 
+                () -> getThrottleAxisMaybe(), 
+                () -> robotCentric.getAsBoolean(),
+                theLEDs,
+                new JoystickButton(driver, 4)
+            ));
 
         // NEW STUFF I ADDED! PLZ CHECK BECAUSE I KNOW I DID NOT DO THIS RIGHT! 
         //I DONT WANT TO SHOVE THIS IN A RANDOM COMMAND FOR FEAR THAT IT WILL NO LONGER BE ABLE TO ACCESS THE main_failed VARIABLE
@@ -262,18 +274,19 @@ public class RobotContainer {
         
         SmartDashboard.putData("intake", intake);
         SmartDashboard.putData("Launcher", launcher);
+        SmartDashboard.putData("Swerve", s_Swerve);
         SmartDashboard.putData("Gyro",s_Swerve.gyro);
         SmartDashboard.putBoolean("ControlorA", new JoystickButton(secondary, 1).getAsBoolean());
         SmartDashboard.putBoolean("ControlorB", new JoystickButton(secondary, 2).getAsBoolean());
         SmartDashboard.putBoolean("ControlorX", new JoystickButton(secondary, 3).getAsBoolean());
 
-        SmartDashboard.putData(PDP);
-        System.out.println("Radio");
-        System.out.println(PDP.getCurrent(15));
-        System.out.println("RIO");
-        System.out.println(PDP.getCurrent(20));
-        System.out.println("Total");
-        System.out.println(PDP.getTotalCurrent());
+        // SmartDashboard.putData(PDP);
+        // System.out.println("Radio");
+        // System.out.println(PDP.getCurrent(15));
+        // System.out.println("RIO");
+        // System.out.println(PDP.getCurrent(20));
+        // System.out.println("Total");
+        // System.out.println(PDP.getTotalCurrent());
 
         intake.updateData();
 

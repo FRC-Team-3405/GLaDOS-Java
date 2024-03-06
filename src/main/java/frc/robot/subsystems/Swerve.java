@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 /* 
-NetworkTableInstance.getDefault().getTable("limelight").getEntry("priorityid").setNumber(8);
+NetworkTableInstance.getDefault().getTable("limelight").getEntry("priorityid").setNumber(7);
 int tag_id = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getNumber();
 double X_from_camera = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[0]);
 double Y_from_camera = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_robotspace").getDoubleArray(new double[1]);
