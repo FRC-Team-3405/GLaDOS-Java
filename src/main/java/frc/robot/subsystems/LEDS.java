@@ -142,6 +142,14 @@ public class LEDS{
                     SetFull(Constants.Mode.Colors.LS);
                     System.out.println("LS");
                     break;
+                case "LT":
+                    SetFull(Constants.Mode.Colors.LT);
+                    System.out.println("LT");
+                    break;
+                case "LK":
+                    SetFull(Constants.Mode.Colors.LK);
+                    System.out.println("LK");
+                    break;
                 case "L":
                     SetFull(Constants.Mode.Colors.L);
                     System.out.println("L");
@@ -153,7 +161,7 @@ public class LEDS{
     }
 
     public void setMode(String modeID) {
-        String[] vModes = {"D","IO","IR","IF","IA","N","LS","L"};
+        String[] vModes = {"D","IO","IR","IF","IA","N","LS","L","LT","LK"};
         if (Arrays.asList(vModes).contains(modeID)) {
             mode = modeID;
         }

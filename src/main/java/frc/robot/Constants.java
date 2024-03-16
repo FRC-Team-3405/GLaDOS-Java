@@ -189,6 +189,17 @@ public final class Constants {
         public static final double InPoint = -1000;
     }
 
+    public static final class  TargetSwerve {
+        // public static final double P = 0.05;
+        // public static final double I = 0;
+        // public static final double D = 0.001;
+        public static final double P = 0.08;
+        public static final double I = 0;
+        public static final double D = 0.003;
+
+
+    }
+
     // holds constants for mode system
     public static final class Mode {
         public static final double blinkTime = 5.0;
@@ -213,8 +224,10 @@ public final class Constants {
             public static final Color IA = Color.kPink;   // Intake Amp Color
             public static final Color N = Color.kYellow;  // Note Color
             public static final Color LS = Color.kGreen;  // Launcher Spinup Color
-            public static final Color L = Color.kAqua;     // Color Color
-            public static final Color DIS = Color.kPurple; //Disable Color
+            public static final Color LT = Color.kPurple;  // Launcher Targeting Color
+            public static final Color LK = Color.kGreen;  // Launcher Lock Color
+            public static final Color L = Color.kAqua;    // Launcher Launching Color
+            // public static final Color DIS = Color.kPurple;//Disable Color
         }
     }
 
