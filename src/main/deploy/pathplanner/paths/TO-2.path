@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4993411183403562,
-        "y": 4.034483282641779
+        "x": 1.9904956049228335,
+        "y": 5.566417514601411
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2537638750491178,
-        "y": 4.104648209296418
+        "x": 2.1900526364941553,
+        "y": 5.5797213167061654
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.9029392417759192,
-        "y": 4.256672217048139
+        "x": 2.59859163592971,
+        "y": 5.566417514601411
       },
       "prevControl": {
-        "x": 1.1952931028369176,
-        "y": 4.139730672623739
+        "x": 2.1776020760018726,
+        "y": 5.589805823486292
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BTM SHOOT"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -58.39249775375112,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "BTM",
+  "folder": "MID",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 4.3987053549955135,
     "velocity": 0
   },
   "useDefaultConstraints": true

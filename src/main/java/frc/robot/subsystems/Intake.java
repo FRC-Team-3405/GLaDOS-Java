@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import java.util.function.IntSupplier;
+import java.sql.Time;
+import java.util.concurrent.TimeUnit;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
@@ -76,14 +78,21 @@ public class Intake extends SubsystemBase{
     }
 
     public void startIntake() {
-        m_intakeMotor1.set(VictorSPXControlMode.PercentOutput, Constants.Intake.intakeVel);
-        m_intakeMotor2.set(VictorSPXControlMode.PercentOutput, Constants.Intake.intakeVel);
         // barPID.setReference(0.3, CANSparkMax.ControlType.kDutyCycle);
         m_barMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
         m_barMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
         m_barMotor.set(Constants.Intake.acuateVel);
         
         System.out.println("Start");
+        // wait(1000);
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(500);
+        } catch(InterruptedException e){
+            System.out.println("interuption, sleeping");
+        }
+        m_intakeMotor1.set(VictorSPXControlMode.PercentOutput, Constants.Intake.intakeVel);
+        m_intakeMotor2.set(VictorSPXControlMode.PercentOutput, Constants.Intake.intakeVel);
     }
     
     public void endIntake() {

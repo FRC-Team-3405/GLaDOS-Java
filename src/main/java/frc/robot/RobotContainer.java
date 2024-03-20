@@ -34,6 +34,7 @@ import frc.robot.commands.IntakeRun;
 import frc.robot.commands.LaunchASAP;
 import frc.robot.commands.LaunchControled;
 import frc.robot.commands.TargetSwerve;
+import frc.robot.commands.TargetSwerveAuto;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Band;
 import frc.robot.subsystems.Intake;
@@ -137,6 +138,13 @@ public class RobotContainer {
         NamedCommands.registerCommand("RunIntake", new IntakeRun(intake, LIM, new JoystickButton(secondary, 3), theLEDs));
         NamedCommands.registerCommand("EndIntake", new IntakeDefault(intake, LIM));
         NamedCommands.registerCommand("LaunchASAP", new LaunchASAP(intake,launcher,theLEDs));
+        NamedCommands.registerCommand("TargetSwerve", 
+            new TargetSwerveAuto(
+                s_Swerve,
+                theLEDs,
+                launcher,
+                intake
+            ));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -148,6 +156,7 @@ public class RobotContainer {
 
         musiChooser = theBand.Buildchoser();
         SmartDashboard.putData("Music Choser",musiChooser);
+        SmartDashboard.putNumber("SmartLaunch",0);
 
         secondary.getPOV();
 

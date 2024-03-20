@@ -19,37 +19,20 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Swerve;
 
 
-public class TargetSwerve extends Command {    
+public class TargetSwerveAuto extends Command {    
     private Swerve s_Swerve;    
     private Launcher s_Launcher;
     private Intake s_Intake;
-    private DoubleSupplier translationSup;
-    private DoubleSupplier strafeSup;
-    private DoubleSupplier rotationSup;
-    private DoubleSupplier throtleSupplier;
-    private BooleanSupplier robotCentricSup;
-
-    private JoystickButton overrideButton;
-    private JoystickButton launchButton;
-    
 
     private double swerve_X_speed;
     private double swerve_Y_speed; 
-    private double swerve_X_speedt;
-    private double swerve_Y_speedt; 
-    private boolean shoot_x;
-    private boolean shoot_y;
 
     private boolean shoot;
-    private boolean spin;
     private boolean end;
     private boolean launching;
     private Timer timer;
     private Timer timerL;
 
-    
-
-    private Boolean bHold;
     private NetworkTable LLtbl;
 
     private PIDController Xpid;
@@ -67,7 +50,7 @@ public class TargetSwerve extends Command {
      * @param rotationSup Rotation suplier, typicaly a controlor axis
      * @param robotCentricSup wether to drive relative to the robot.
      */
-    public TargetSwerve(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, DoubleSupplier throtleSupplier, BooleanSupplier robotCentricSup, LEDS led, Launcher s_Launcher, Intake s_Intake, JoystickButton overrideButton, JoystickButton launchButton) {
+    public TargetSwerveAuto(Swerve s_Swerve, LEDS led, Launcher s_Launcher, Intake s_Intake) {
         this.s_Swerve = s_Swerve;
         this.s_Launcher = s_Launcher;
         this.s_Intake = s_Intake;
@@ -75,20 +58,12 @@ public class TargetSwerve extends Command {
         addRequirements(s_Launcher);
         addRequirements(s_Intake);
 
-        this.translationSup = translationSup;
-        this.strafeSup = strafeSup;
-        this.rotationSup = rotationSup;
-        this.robotCentricSup = robotCentricSup;
-        this.throtleSupplier = throtleSupplier;
-        this.overrideButton = overrideButton;
-        this.launchButton = launchButton;
         this.led = led;
     }
 
     
     @Override
     public void initialize() {
-        this.bHold = true;
 
         Xpid = new PIDController(Constants.TargetSwerve.P, Constants.TargetSwerve.I, Constants.TargetSwerve.D);
         Ypid = new PIDController(Constants.TargetSwerve.P, Constants.TargetSwerve.I, Constants.TargetSwerve.D);
@@ -102,7 +77,6 @@ public class TargetSwerve extends Command {
         timer = new Timer();
         timerL = new Timer();
         shoot = false;
-        spin = false;
         end = false;
         launching = false;
 
@@ -117,13 +91,6 @@ public class TargetSwerve extends Command {
 
     @Override
     public void execute() {
-        if (bHold) bHold = overrideButton.getAsBoolean();
-        /* Get Values, Deadband*/
-        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
-        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
-        double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
-        double throtleVal = 1-((throtleSupplier.getAsDouble()+1)/2);
-
 
         // Get Targert X and Y
         double X_from_camera = LLtbl.getValue("tx").getDouble();
@@ -152,7 +119,7 @@ public class TargetSwerve extends Command {
         } 
 
         SmartDashboard.putNumber("SmartLaunch", timerL.get());
-        if((launchButton.getAsBoolean() && !end) || (timerL.hasElapsed(Constants.TargetSwerve.SmartLaunchTime) && !launching)) {
+        if(timerL.hasElapsed(Constants.TargetSwerve.SmartLaunchTime) && !launching) {
             s_Intake.pushIntake(false);
             end = true;
             timer.start();
@@ -169,8 +136,8 @@ public class TargetSwerve extends Command {
 
         /* Drive */
         s_Swerve.drive(
-            new Translation2d(-swerve_Y_speed * throtleVal, -swerve_X_speed * throtleVal).times(Constants.Swerve.maxSpeed), 
-            (rotationVal * throtleVal) * Constants.Swerve.maxAngularVelocity, 
+            new Translation2d(-swerve_Y_speed * 0.5, -swerve_X_speed * 0.5).times(Constants.Swerve.maxSpeed), 
+            0 * Constants.Swerve.maxAngularVelocity, 
             false, 
             false
         );
@@ -186,7 +153,6 @@ public class TargetSwerve extends Command {
 
     @Override
     public boolean isFinished() {
-        
-        return (overrideButton.getAsBoolean() && !bHold) || (end && timer.get() >= Constants.Launcher.LaunchStopTime);
+        return end && timer.get() >= Constants.Launcher.LaunchStopTime;
     }
 }

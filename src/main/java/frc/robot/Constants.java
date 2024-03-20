@@ -175,6 +175,7 @@ public final class Constants {
         public static final double P = 0.08;
         public static final double I = 0.05;
         public static final double D = 0.00;
+
     
         public static final double FF = 0.000156;
     
@@ -187,6 +188,7 @@ public final class Constants {
     
         public static final double OutPoint = 1000;
         public static final double InPoint = -1000;
+
     }
 
     public static final class  TargetSwerve {
@@ -196,6 +198,8 @@ public final class Constants {
         public static final double P = 0.08;
         public static final double I = 0;
         public static final double D = 0.003;
+        
+        public static final double SmartLaunchTime = 0.5;
 
 
     }
@@ -232,10 +236,10 @@ public final class Constants {
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 1;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
-        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+        public static final double kMaxSpeedMetersPerSecond = 1.2;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 0.8;
+        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI*1.5;
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI*1.5;
     
         public static final double kPXController = 1;
         public static final double kPYController = 1;
