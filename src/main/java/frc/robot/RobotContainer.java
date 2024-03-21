@@ -34,6 +34,7 @@ import frc.robot.commands.IntakeRun;
 import frc.robot.commands.LaunchASAP;
 import frc.robot.commands.LaunchControled;
 import frc.robot.commands.TargetSwerve;
+import frc.robot.commands.TargetSwervePlus;
 import frc.robot.commands.TargetSwerveAuto;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Band;
@@ -87,7 +88,7 @@ public class RobotContainer {
     private final NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
 
     /* Subsystems */
-    private final LEDS theLEDs = new LEDS(9,60);
+    private final LEDS theLEDs = new LEDS(9,176);
 
     private final Band theBand = new Band();
 
@@ -234,11 +235,19 @@ public class RobotContainer {
         new JoystickButton(driver, 4).onTrue(
             new TargetSwerve(
                 s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                () -> -driver.getRawAxis(throttleAxis), 
-                () -> robotCentric.getAsBoolean(),
+                theLEDs,
+                launcher,
+                intake,
+                new JoystickButton(driver, 4),
+                new JoystickButton(secondary, 6)
+            ));
+        new JoystickButton(driver, 3).onTrue(
+            new TargetSwervePlus(
+                s_Swerve, 
+                () -> -driver.getRawAxis(strafeAxis), 
+                () -> -driver.getRawAxis(rotationAxis), 
                 theLEDs,
                 launcher,
                 intake,
@@ -342,7 +351,7 @@ public class RobotContainer {
     }
 
     public void autonomousPeriodic() {
-        // theLEDs.rainbow();
+        theLEDs.rainbow(1);
     }
     
     public void testInit() {
@@ -350,7 +359,7 @@ public class RobotContainer {
     }
 
     public void testPeriodic() {
-        theLEDs.rainbow();
+        theLEDs.rainbow(1);
     }
 
     public void disabledInit () {

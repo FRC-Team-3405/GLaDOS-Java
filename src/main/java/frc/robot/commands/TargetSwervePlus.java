@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Swerve;
 
 
-public class TargetSwerve extends Command {    
+public class TargetSwervePlus extends Command {    
     private Swerve s_Swerve;    
     private Launcher s_Launcher;
     private Intake s_Intake;
@@ -54,10 +54,12 @@ public class TargetSwerve extends Command {
      * Default Teleop mode, takes the swerve and conrolor 
      * 
      * @param s_Swerve swerve base
+     * @param translationSup forward and back suplier, typicaly a controlor axis
+     * @param strafeSup left and right suplier, typicaly a controlor axis
      * @param rotationSup Rotation suplier, typicaly a controlor axis
      * @param robotCentricSup wether to drive relative to the robot.
      */
-    public TargetSwerve(Swerve s_Swerve, DoubleSupplier strafeSup, DoubleSupplier rotationSup, LEDS led, Launcher s_Launcher, Intake s_Intake, JoystickButton overrideButton, JoystickButton launchButton) {
+    public TargetSwervePlus(Swerve s_Swerve, DoubleSupplier strafeSup, DoubleSupplier rotationSup, LEDS led, Launcher s_Launcher, Intake s_Intake, JoystickButton overrideButton, JoystickButton launchButton) {
         this.s_Swerve = s_Swerve;
         this.s_Launcher = s_Launcher;
         this.s_Intake = s_Intake;
@@ -127,6 +129,8 @@ public class TargetSwerve extends Command {
             if(led.getMode()!="LK"){
             led.setMode("LK");
             System.out.println("set LK");
+            timerL.reset();
+            timerL.start();
             }
         } else if (!end && led.getMode()!="LT" && !launching) {
             led.setMode("LT");
@@ -134,7 +138,7 @@ public class TargetSwerve extends Command {
         } 
 
         SmartDashboard.putNumber("SmartLaunch", timerL.get());
-        if((launchButton.getAsBoolean() && !end)) {
+        if((launchButton.getAsBoolean() && !end) || (timerL.hasElapsed(Constants.TargetSwerve.SmartLaunchTime) && !launching)) {
             s_Intake.pushIntake(false);
             end = true;
             timer.start();
