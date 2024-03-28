@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.9029392417759192,
-        "y": 4.256672217048139
+        "x": 0.973104168430559,
+        "y": 4.513943614781817
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1602106395095981,
-        "y": 4.256672217048139
+        "x": 1.2303755661642377,
+        "y": 4.513943614781817
       },
       "isLocked": false,
       "linkedName": "BTM SHOOT"
     },
     {
       "anchor": {
-        "x": 2.4699559370628714,
-        "y": 4.128036518181299
+        "x": 2.70383902591167,
+        "y": 4.1046482092964185
       },
       "prevControl": {
-        "x": 1.6981417438618356,
-        "y": 4.139730672623739
+        "x": 1.9320248327106342,
+        "y": 4.116342363738859
       },
       "nextControl": null,
       "isLocked": false,
@@ -51,7 +51,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

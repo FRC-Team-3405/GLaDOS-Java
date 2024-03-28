@@ -136,6 +136,7 @@ public class RobotContainer {
         
         intake.setDefaultCommand(new IntakeDefault(intake,LIM));
 
+        
         NamedCommands.registerCommand("RunIntake", new IntakeRun(intake, LIM, new JoystickButton(secondary, 3), theLEDs));
         NamedCommands.registerCommand("EndIntake", new IntakeDefault(intake, LIM));
         NamedCommands.registerCommand("LaunchASAP", new LaunchASAP(intake,launcher,theLEDs));
@@ -164,7 +165,7 @@ public class RobotContainer {
         // theLEDs.SetFull(255, 60, 0);
         theLEDs.setMode("D");
 
-
+        
         m_visionThread =
         new Thread(
             () -> {
@@ -230,6 +231,7 @@ public class RobotContainer {
         // new JoystickButton(secondary, 4).onTrue(new LaunchASAP(intake,launcher,theLEDs));
         new JoystickButton(secondary, 4).onTrue(new LaunchControled(intake,launcher,theLEDs,new JoystickButton(secondary, 4),new JoystickButton(secondary, 6)));
         new JoystickButton(secondary, 2).onTrue(new IntakeRun(intake, LIM, new JoystickButton(secondary, 2),theLEDs));
+        new JoystickButton(driver, 5).onTrue(new IntakeRun(intake, LIM, new JoystickButton(driver, 5),theLEDs));
         new JoystickButton(secondary, 3).onTrue(new IntakeFix(intake, LIM, new JoystickButton(secondary, 3),new JoystickButton(secondary, 6),theLEDs));
         new JoystickButton(secondary, 1).onTrue(new IntakeAmp(intake, LIM, new JoystickButton(secondary, 1), new JoystickButton(secondary, 6),theLEDs));
         new JoystickButton(driver, 4).onTrue(
@@ -241,7 +243,8 @@ public class RobotContainer {
                 launcher,
                 intake,
                 new JoystickButton(driver, 4),
-                new JoystickButton(secondary, 6)
+                new JoystickButton(secondary, 6),
+                new JoystickButton(driver, 6)
             ));
         new JoystickButton(driver, 3).onTrue(
             new TargetSwervePlus(

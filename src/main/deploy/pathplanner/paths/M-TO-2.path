@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 1.4993411183403562,
-        "y": 5.5430292057165325
+        "y": 5.507946742389212
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.5695060449949956,
-        "y": 5.55472336015897
+        "y": 5.51964089683165
       },
       "isLocked": false,
       "linkedName": "MID SHOOT"
     },
     {
       "anchor": {
-        "x": 2.5284267092750707,
-        "y": 5.556066607628711
+        "x": 2.855863033663389,
+        "y": 5.5430292057165325
       },
       "prevControl": {
-        "x": 1.943718987153074,
-        "y": 5.55472336015897
+        "x": 2.271155311541392,
+        "y": 5.541685958246791
       },
       "nextControl": null,
       "isLocked": false,
@@ -63,7 +63,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

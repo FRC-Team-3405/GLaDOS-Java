@@ -27,7 +27,7 @@ public class TargetSwerve extends Command {
 
     private JoystickButton overrideButton;
     private JoystickButton launchButton;
-    
+    private JoystickButton altLaunch;
 
     private double swerve_X_speed;
     private double swerve_Y_speed; 
@@ -57,7 +57,15 @@ public class TargetSwerve extends Command {
      * @param rotationSup Rotation suplier, typicaly a controlor axis
      * @param robotCentricSup wether to drive relative to the robot.
      */
-    public TargetSwerve(Swerve s_Swerve, DoubleSupplier strafeSup, DoubleSupplier rotationSup, LEDS led, Launcher s_Launcher, Intake s_Intake, JoystickButton overrideButton, JoystickButton launchButton) {
+    public TargetSwerve(Swerve s_Swerve, 
+                        DoubleSupplier strafeSup, 
+                        DoubleSupplier rotationSup, 
+                        LEDS led, 
+                        Launcher s_Launcher, 
+                        Intake s_Intake, 
+                        JoystickButton overrideButton, 
+                        JoystickButton launchButton,
+                        JoystickButton altLaunch) {
         this.s_Swerve = s_Swerve;
         this.s_Launcher = s_Launcher;
         this.s_Intake = s_Intake;
@@ -68,6 +76,7 @@ public class TargetSwerve extends Command {
         this.rotationSup = rotationSup;
         this.overrideButton = overrideButton;
         this.launchButton = launchButton;
+        this.altLaunch = altLaunch;
         this.led = led;
     }
 
@@ -134,7 +143,7 @@ public class TargetSwerve extends Command {
         } 
 
         SmartDashboard.putNumber("SmartLaunch", timerL.get());
-        if((launchButton.getAsBoolean() && !end)) {
+        if((launchButton.getAsBoolean() && !end) || (altLaunch.getAsBoolean() && !end)) {
             s_Intake.pushIntake(false);
             end = true;
             timer.start();

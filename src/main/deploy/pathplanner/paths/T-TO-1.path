@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8795509328910394,
-        "y": 6.689056341075646
+        "x": 0.8327743151212799,
+        "y": 6.560420642208806
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3707054194735169,
-        "y": 6.817692039942485
+        "x": 1.3239288017037574,
+        "y": 6.689056341075645
       },
       "isLocked": false,
       "linkedName": "TOP SHOOT"
@@ -51,7 +51,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

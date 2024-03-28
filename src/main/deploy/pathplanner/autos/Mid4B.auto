@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8795509328910394,
-      "y": 6.689056341075646
+      "x": 1.171904793952038,
+      "y": 5.531335051274091
     },
-    "rotation": 56.907309424713056
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "T-SHOOT"
+            "pathName": "M-SHOOT"
           }
         },
         {
@@ -26,13 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "T-TO-1"
+            "pathName": "TO-2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "T-SHOOT"
+            "pathName": "M-SHOOT"
           }
         },
         {
@@ -44,13 +44,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "T-TO-M1"
+            "pathName": "TO-1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "T-SHOOT"
+            "pathName": "M-SHOOT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchASAP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TO-3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M-SHOOT"
           }
         },
         {
