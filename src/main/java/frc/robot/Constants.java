@@ -68,10 +68,12 @@ public final class Constants {
         public static final double angleKD = chosenModule.angleKD;
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 0.0; //TODO: This must be tuned to specific robot
+        public static final double driveKP = 0.8; //TODO: This must be tuned to specific robot
         public static final double driveKI = 0.0;
-        public static final double driveKD = 0.0;
+        public static final double driveKD = 0.3;
         public static final double driveKF = 0.0;
+
+
 
         /* Drive Motor Characterization Values From SYSID */
         public static final double driveKS = 0.32; //TODO: This must be tuned to specific robot
@@ -80,7 +82,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 4.5; //TODOx: This must be tuned to specific robot DONE
+        public static final double maxSpeed = 5.5; //TODOx: This must be tuned to specific robot DONE
         /** Radians per Second */
         public static final double maxAngularVelocity = 7.0; //TODOx: This must be tuned to specific robot DONE
 
@@ -116,8 +118,8 @@ public final class Constants {
         public static final class Mod2 { //TODOx: This must be tuned to specific robot DONE
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
-            public static final int canCoderID = 16;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-220.9+90);
+            public static final int canCoderID = 19;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-42.45);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -126,8 +128,8 @@ public final class Constants {
         public static final class Mod3 { //TODOx: This must be tuned to specific robot DONE
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
-            public static final int canCoderID = 19;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-313.4+90);
+            public static final int canCoderID = 16;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(55.89);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -198,9 +200,11 @@ public final class Constants {
         // public static final double P = 0.05;
         // public static final double I = 0;
         // public static final double D = 0.001;
-        public static final double P = 0.08;
+        public static final double P = 0.06;
         public static final double I = 0;
-        public static final double D = 0.003;
+        public static final double D = 0.002;
+
+        public static final double clamp = 0.75;
         
         public static final double SmartLaunchTime = 0.5;
 

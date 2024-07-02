@@ -191,8 +191,7 @@ public class LEDS{
         
         m_led.setData(m_ledBuffer);
     }
-
-
+    
     /**
      * Rainbow function, called perodicly, shifts a rainbow through the strip
      * 

@@ -115,15 +115,15 @@ public class TargetSwerve extends Command {
         if (bHold) bHold = overrideButton.getAsBoolean();
         /* Get Values, Deadband*/
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
-        double throtleVal = 0.5;
+        double throtleVal = 0.3;
 
 
         // Get Targert X and Y
         double X_from_camera = LLtbl.getValue("tx").getDouble();
         double Y_from_camera = LLtbl.getValue("ty").getDouble();
         // Calculate PID for movement
-        swerve_X_speed = MathUtil.clamp(Xpid.calculate(X_from_camera), -1,1);
-        swerve_Y_speed = MathUtil.clamp(Ypid.calculate(Y_from_camera), -1,1);
+        swerve_X_speed = MathUtil.clamp(Xpid.calculate(X_from_camera), -Constants.TargetSwerve.clamp,Constants.TargetSwerve.clamp);
+        swerve_Y_speed = MathUtil.clamp(Ypid.calculate(Y_from_camera), -Constants.TargetSwerve.clamp,Constants.TargetSwerve.clamp);
 
         // If target reached set shoot to true
         shoot = Xpid.atSetpoint() && Ypid.atSetpoint();
