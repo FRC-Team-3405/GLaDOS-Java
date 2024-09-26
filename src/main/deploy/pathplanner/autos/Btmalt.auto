@@ -52,6 +52,12 @@
           "data": {
             "pathName": "MB-TO-SHOOT"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchASAP"
+          }
         }
       ]
     }

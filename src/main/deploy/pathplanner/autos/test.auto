@@ -16,12 +16,6 @@
           "data": {
             "pathName": "M-SHOOT"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LaunchASAP"
-          }
         }
       ]
     }

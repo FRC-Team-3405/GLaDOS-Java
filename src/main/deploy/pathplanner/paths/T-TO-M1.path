@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8795509328910394,
-        "y": 6.689056341075646
+        "x": 0.8327743151212799,
+        "y": 6.560420642208806
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9889153137819637,
-        "y": 6.199087072848821
+        "x": 2.61028579037215,
+        "y": 6.630585568863446
       },
       "isLocked": false,
       "linkedName": "TOP SHOOT"
     },
     {
       "anchor": {
-        "x": 2.917573402714373,
-        "y": 6.286398158381903
+        "x": 3.0429695047424277,
+        "y": 6.560420642208806
       },
       "prevControl": {
-        "x": 2.5200511662284586,
-        "y": 6.304887564730085
+        "x": 2.6472040803080072,
+        "y": 6.518761123847288
       },
       "nextControl": {
-        "x": 3.2793314510542197,
-        "y": 6.269572202645167
+        "x": 3.9317252423678632,
+        "y": 6.653973877748326
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.9545143705672015,
-        "y": 7.226987445427883
+        "x": 8.57430455601652,
+        "y": 7.402399762064483
       },
       "prevControl": {
-        "x": 7.483034508688559,
-        "y": 6.690794661330605
+        "x": 6.375803520837811,
+        "y": 7.566117924258642
       },
       "nextControl": null,
       "isLocked": false,
@@ -77,14 +77,14 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 27.050597007086274,
+    "rotation": -3.57633437499725,
     "rotateFast": false
   },
   "reversed": false,

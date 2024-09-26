@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.5928943538798759,
-        "y": 5.5430292057165325
+        "x": 1.3122346472613169,
+        "y": 5.531335051274091
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3005404928188773,
-        "y": 4.420390379242298
+        "x": 1.0198807862003183,
+        "y": 4.408696224799857
       },
       "isLocked": false,
       "linkedName": "MID SHOOT"
     },
     {
       "anchor": {
-        "x": 2.61028579037215,
-        "y": 4.326837143702777
+        "x": 2.69214487146923,
+        "y": 4.268366371490578
       },
       "prevControl": {
-        "x": 2.493344245947751,
-        "y": 4.736132549188175
+        "x": 2.575203327044831,
+        "y": 4.6776617769759765
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,8 +50,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

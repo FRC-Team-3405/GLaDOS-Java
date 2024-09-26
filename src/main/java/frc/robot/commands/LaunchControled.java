@@ -14,6 +14,7 @@ public class LaunchControled extends Command{
     private Launcher s_Launcher;
     private Timer timer;
     private boolean launch;
+    private boolean bHold;
     private LEDS theLEDs;
     private JoystickButton overrideButton;
     private JoystickButton launchButton;
@@ -25,6 +26,7 @@ public class LaunchControled extends Command{
         this.timer = new Timer();
         this.launch = false;
         this.theLEDs = theLEDs;
+        this.bHold = true;
         this.overrideButton = overrideButton;
         this.launchButton = launchButton;
 
@@ -37,6 +39,7 @@ public class LaunchControled extends Command{
         timer = new Timer();
         // timer.start();
         launch = false;
+        bHold = true;
         s_Intake.lightPull(false);
         s_Launcher.startLaunch();
         System.out.println("Start LaunchASAP");
@@ -47,7 +50,7 @@ public class LaunchControled extends Command{
 
     @Override
     public void execute() {
-        
+        if (bHold) bHold = overrideButton.getAsBoolean();
         if (launchButton.getAsBoolean()) {
             timer.start();
             launch = true;
@@ -69,6 +72,6 @@ public class LaunchControled extends Command{
 
     @Override
     public boolean isFinished() {
-        return (timer.get() >= (Constants.Launcher.LaunchStopTime) && launch);
+        return (timer.get() >= (Constants.Launcher.LaunchStopTime) && launch) || (overrideButton.getAsBoolean() && !bHold);
     }
 }

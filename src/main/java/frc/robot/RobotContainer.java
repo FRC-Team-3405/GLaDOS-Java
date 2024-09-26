@@ -1,44 +1,47 @@
 package frc.robot;
 
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
 
-import com.ctre.phoenix6.Orchestra;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.networktables.DoubleTopic;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import frc.robot.autos.*;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.robot.commands.IntakeAmp;
+import frc.robot.commands.IntakeDefault;
+import frc.robot.commands.IntakeFix;
+import frc.robot.commands.IntakeRun;
+import frc.robot.commands.LaunchASAP;
+import frc.robot.commands.LaunchControled;
+import frc.robot.commands.TargetSwerve;
+import frc.robot.commands.TargetSwervePlus;
+import frc.robot.commands.TargetSwerveAuto;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.Band;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDS;
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.Swerve;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -85,7 +88,7 @@ public class RobotContainer {
     private final NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
 
     /* Subsystems */
-    private final LEDS theLEDs = new LEDS(0,60);
+    private final LEDS theLEDs = new LEDS(9,176);
 
     private final Band theBand = new Band();
 
@@ -104,6 +107,9 @@ public class RobotContainer {
     // dashboard selector for autos and music
     private final SendableChooser<Command> autoChooser;
     private final SendableChooser<String> musiChooser;
+
+    private Field2d m_field = new Field2d();
+    private Field2d m_LLfield = new Field2d();
 
 
     private Thread m_visionThread;
@@ -130,10 +136,17 @@ public class RobotContainer {
         
         intake.setDefaultCommand(new IntakeDefault(intake,LIM));
 
+        
         NamedCommands.registerCommand("RunIntake", new IntakeRun(intake, LIM, new JoystickButton(secondary, 3), theLEDs));
         NamedCommands.registerCommand("EndIntake", new IntakeDefault(intake, LIM));
         NamedCommands.registerCommand("LaunchASAP", new LaunchASAP(intake,launcher,theLEDs));
-
+        NamedCommands.registerCommand("TargetSwerve", 
+            new TargetSwerveAuto(
+                s_Swerve,
+                theLEDs,
+                launcher,
+                intake
+            ));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -145,13 +158,14 @@ public class RobotContainer {
 
         musiChooser = theBand.Buildchoser();
         SmartDashboard.putData("Music Choser",musiChooser);
+        SmartDashboard.putNumber("SmartLaunch",0);
 
         secondary.getPOV();
 
         // theLEDs.SetFull(255, 60, 0);
         theLEDs.setMode("D");
 
-
+        
         m_visionThread =
         new Thread(
             () -> {
@@ -194,6 +208,15 @@ public class RobotContainer {
             });
         m_visionThread.setDaemon(true);
         m_visionThread.start();
+
+
+
+        
+        SmartDashboard.putNumber("Xpid", 0);
+        SmartDashboard.putNumber("Ypid", 0);
+        SmartDashboard.putBoolean("Xshoot", false);
+        SmartDashboard.putBoolean("Yshoot", false);
+        SmartDashboard.putBoolean("Shoot", false);
     }
 
     /**
@@ -208,9 +231,33 @@ public class RobotContainer {
         // new JoystickButton(secondary, 4).onTrue(new LaunchASAP(intake,launcher,theLEDs));
         new JoystickButton(secondary, 4).onTrue(new LaunchControled(intake,launcher,theLEDs,new JoystickButton(secondary, 4),new JoystickButton(secondary, 6)));
         new JoystickButton(secondary, 2).onTrue(new IntakeRun(intake, LIM, new JoystickButton(secondary, 2),theLEDs));
+        new JoystickButton(driver, 5).onTrue(new IntakeRun(intake, LIM, new JoystickButton(driver, 5),theLEDs));
         new JoystickButton(secondary, 3).onTrue(new IntakeFix(intake, LIM, new JoystickButton(secondary, 3),new JoystickButton(secondary, 6),theLEDs));
         new JoystickButton(secondary, 1).onTrue(new IntakeAmp(intake, LIM, new JoystickButton(secondary, 1), new JoystickButton(secondary, 6),theLEDs));
-        new JoystickButton(driver, 3).onTrue(smartLaunch());
+        new JoystickButton(driver, 4).onTrue(
+            new TargetSwerve(
+                s_Swerve, 
+                () -> -driver.getRawAxis(strafeAxis), 
+                () -> -driver.getRawAxis(rotationAxis), 
+                theLEDs,
+                launcher,
+                intake,
+                new JoystickButton(driver, 4),
+                new JoystickButton(secondary, 6),
+                new JoystickButton(driver, 6)
+            ));
+        new JoystickButton(driver, 3).onTrue(
+            new TargetSwervePlus(
+                s_Swerve, 
+                () -> -driver.getRawAxis(strafeAxis), 
+                () -> -driver.getRawAxis(rotationAxis), 
+                theLEDs,
+                launcher,
+                intake,
+                new JoystickButton(driver, 4),
+                new JoystickButton(secondary, 6)
+            ));
+        // new JoystickButton(driver, 3).onTrue(smartLaunch());
     }
 
     public void updateInfo() {
@@ -228,13 +275,27 @@ public class RobotContainer {
         SmartDashboard.putBoolean("LS", theLEDs.getMode() == "LS");
         SmartDashboard.putBoolean("L", theLEDs.getMode() == "L");
         
+        Pose2d pose = s_Swerve.getPose();
+        m_field.setRobotPose(pose);
+
+        // NetworkTableInstance.getDefault().getTable("limelight").getEntry("priorityid").setNumber(7);
+        NetworkTable LLtbl = NetworkTableInstance.getDefault().getTable("limelight");
+        double[] LLpose = LLtbl.getEntry("botpose").getDoubleArray(new double[6]);
+
+        
+        m_LLfield.setRobotPose(new Pose2d(LLpose[0], LLpose[1], new Rotation2d(LLpose[3],LLpose[4])));
+
         SmartDashboard.putData("intake", intake);
         SmartDashboard.putData("Launcher", launcher);
+        SmartDashboard.putData("Swerve", s_Swerve);
         SmartDashboard.putData("Gyro",s_Swerve.gyro);
-        SmartDashboard.putBoolean("ControlorA", new JoystickButton(secondary, 1).getAsBoolean());
-        SmartDashboard.putBoolean("ControlorB", new JoystickButton(secondary, 2).getAsBoolean());
-        SmartDashboard.putBoolean("ControlorX", new JoystickButton(secondary, 3).getAsBoolean());
+        SmartDashboard.putData("BotPose", m_field);
+        SmartDashboard.putData("BotPoseLL", m_LLfield);
+        // SmartDashboard.putBoolean("ControlorA", new JoystickButton(secondary, 1).getAsBoolean());
+        // SmartDashboard.putBoolean("ControlorB", new JoystickButton(secondary, 2).getAsBoolean());
+        // SmartDashboard.putBoolean("ControlorX", new JoystickButton(secondary, 3).getAsBoolean());
 
+        // SmartDashboard.putData(PDP);
         // System.out.println("Radio");
         // System.out.println(PDP.getCurrent(15));
         // System.out.println("RIO");
@@ -242,7 +303,11 @@ public class RobotContainer {
         // System.out.println("Total");
         // System.out.println(PDP.getTotalCurrent());
 
-        intake.updateData();
+        
+        // NetworkTableInstance.getDefault().getTable("limelight").getEntry("priorityid").setNumber(7);
+        // NetworkTable LLtbl = NetworkTableInstance.getDefault().getTable("limelight");
+
+        // intake.updateData();
 
         double throtleVal = (driver.getRawAxis(throttleAxis)+1)/2;
         SmartDashboard.putNumber("Throttle", throtleVal);
@@ -289,7 +354,7 @@ public class RobotContainer {
     }
 
     public void autonomousPeriodic() {
-        // theLEDs.rainbow();
+        theLEDs.rainbow(1);
     }
     
     public void testInit() {
@@ -297,7 +362,7 @@ public class RobotContainer {
     }
 
     public void testPeriodic() {
-        theLEDs.rainbow();
+        theLEDs.rainbow(1);
     }
 
     public void disabledInit () {
